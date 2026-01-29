@@ -1,0 +1,35 @@
+body {
+    background: black;
+    color: #00ff88;
+    font-family: monospace;
+    margin: 0;
+    padding: 10px;
+}
+
+#chat {
+    height: 70vh;
+    overflow-y: auto;
+    border: 1px solid #00ff88;
+    padding: 5px;
+}
+
+#input {
+    width: 100%;
+    background: black;
+    color: #00ff88;
+    border: 1px solid #00ff88;
+    padding: 8px;
+}
+
+.system { color: yellow; }
+.username { color: cyan; }
+.time { color: gray; font-size: 10px; }
+
+#cutscene {
+    text-align: center;
+    animation: fade 2s forwards;
+}
+
+@keyframes fade {
+    to { opacity: 0; display: none; }
+}

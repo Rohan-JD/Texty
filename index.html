@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TEXTY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<pre id="cutscene">
+████████╗███████╗██╗  ██╗████████╗██╗   ██╗
+╚══██╔══╝██╔════╝╚██╗██╔╝╚══██╔══╝╚██╗ ██╔╝
+   ██║   █████╗   ╚███╔╝    ██║    ╚████╔╝
+   ██║   ██╔══╝   ██╔██╗    ██║     ╚██╔╝
+   ██║   ███████╗██╔╝ ██╗   ██║      ██║
+</pre>
+
+<div id="app" hidden>
+    <div id="users"></div>
+    <div id="chat"></div>
+    <div id="typing"></div>
+
+    <input id="input" placeholder="type message..." autocomplete="off">
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.js"></script>
+</body>
+</html>

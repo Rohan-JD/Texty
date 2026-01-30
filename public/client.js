@@ -48,5 +48,21 @@ function sendDM() {
 socket.on("dm", ({ from, message }) => {
   const div = document.getElementById("messages");
   div.innerHTML += `<p><b>${from}:</b> ${message}</p>`;
+
+  const globalView = document.getElementById("globalView");
+const dmView = document.getElementById("dmView");
+
+document.getElementById("dmToggle").onclick = () => {
+  globalView.style.display = "none";
+  dmView.style.display = "block";
+};
+
+document.getElementById("backBtn").onclick = () => {
+  dmView.style.display = "none";
+  globalView.style.display = "block";
+};
+
+
 });
+
 

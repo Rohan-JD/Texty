@@ -8,35 +8,89 @@ const io = new Server(server);
 
 app.use(express.static("public"));
 
-let users = {};
+const users = {}; 
+// socketId -> { username, friends:Set, requests:Set }
 
-io.on("connection", socket => {
-    socket.on("join", username => {
-        users[socket.id] = username;
-        io.emit("system", `🟢 ${username} joined Texty`);
-        io.emit("userlist", Object.values(users));
-    });
+const usernames = new Set();
 
-    socket.on("chat", msg => {
-        io.emit("chat", {
-            user: users[socket.id],
-            message: msg,
-            time: new Date().toLocaleTimeString()
-        });
-    });
+io.on("connection", (socket) => {
+  console.log("Connected:", socket.id);
 
-    socket.on("typing", () => {
-        socket.broadcast.emit("typing", users[socket.id]);
-    });
+  socket.on("set-username", (username, cb) => {
+    if (usernames.has(username)) {
+      cb({ ok: false, msg: "Username already taken" });
+      return;
+    }
 
-    socket.on("disconnect", () => {
-        const name = users[socket.id];
-        delete users[socket.id];
-        io.emit("system", `🔴 ${name} left Texty`);
-        io.emit("userlist", Object.values(users));
+    usernames.add(username);
+    users[socket.id] = {
+      username,
+      friends: new Set(),
+      requests: new Set()
+    };
+
+    cb({ ok: true });
+    io.emit("user-list", getUsernames());
+  });
+
+  socket.on("send-friend-request", (targetUsername) => {
+    const sender = users[socket.id];
+    if (!sender) return;
+
+    const targetId = findSocketByUsername(targetUsername);
+    if (!targetId) return;
+
+    users[targetId].requests.add(sender.username);
+    io.to(targetId).emit("friend-request", sender.username);
+  });
+
+  socket.on("accept-friend", (fromUsername) => {
+    const user = users[socket.id];
+    const fromId = findSocketByUsername(fromUsername);
+    if (!fromId) return;
+
+    user.requests.delete(fromUsername);
+    user.friends.add(fromUsername);
+    users[fromId].friends.add(user.username);
+
+    io.to(fromId).emit("friend-added", user.username);
+    socket.emit("friend-added", fromUsername);
+  });
+
+  socket.on("dm", ({ to, message }) => {
+    const fromUser = users[socket.id];
+    if (!fromUser || !fromUser.friends.has(to)) return;
+
+    const targetId = findSocketByUsername(to);
+    if (!targetId) return;
+
+    io.to(targetId).emit("dm", {
+      from: fromUser.username,
+      message
     });
+  });
+
+  socket.on("disconnect", () => {
+    const user = users[socket.id];
+    if (user) {
+      usernames.delete(user.username);
+      delete users[socket.id];
+      io.emit("user-list", getUsernames());
+    }
+  });
 });
 
-server.listen(3000, () => {
-    console.log("🔥 TEXTY MAX running on http://localhost:3000");
-});
+function findSocketByUsername(name) {
+  return Object.keys(users).find(
+    (id) => users[id].username === name
+  );
+}
+
+function getUsernames() {
+  return Object.values(users).map(u => u.username);
+}
+
+server.listen(3000, () =>
+  console.log("Server running on port 3000")
+);
+

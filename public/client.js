@@ -1,3 +1,20 @@
+let username = null;
+
+const joinBtn = document.getElementById("joinBtn");
+const usernameInput = document.getElementById("usernameInput");
+const usernameScreen = document.getElementById("usernameScreen");
+const errorText = document.getElementById("userError");
+
+joinBtn.onclick = () => {
+  const name = usernameInput.value.trim();
+  if (!name) {
+    errorText.textContent = "Username required";
+    return;
+  }
+
+  socket.emit("join", name);
+};
+
 const socket = io();
 
 function setUsername() {
@@ -64,5 +81,6 @@ document.getElementById("backBtn").onclick = () => {
 
 
 });
+
 
 

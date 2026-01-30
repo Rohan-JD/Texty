@@ -1,20 +1,73 @@
 body {
-  font-family: Arial;
+  margin: 0;
+  background: #0b0b0b;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
   background: #111;
-  color: #fff;
   padding: 20px;
+  border-right: 1px solid #222;
 }
 
-input, button {
-  padding: 6px;
-  margin: 4px;
+.sidebar h2 {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #00ffcc;
 }
 
-button {
-  cursor: pointer;
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 6px 0;
+  opacity: 0.85;
+}
+
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 #messages {
-  margin-top: 20px;
-  border-top: 1px solid #444;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.message {
+  margin-bottom: 10px;
+}
+
+.input-bar {
+  display: flex;
+  padding: 10px;
+  background: #111;
+  gap: 10px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  background: #222;
+  border: none;
+  color: white;
+}
+
+button {
+  padding: 10px 20px;
+  background: #00ffcc;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
 }

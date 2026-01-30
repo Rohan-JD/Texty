@@ -12,6 +12,16 @@ app.use(express.static("public"));
 const users = {}; 
 // socketId -> { username, friends:Set, requests:Set }
 
+socket.on("dm", ({ to, message }) => {
+  const targetSocket = users[to];
+  if (targetSocket) {
+    targetSocket.emit("dm", {
+      from: socket.username,
+      message
+    });
+  }
+});
+
 const usernames = new Set();
 
 io.on("connection", (socket) => {
@@ -112,5 +122,6 @@ function getUsernames() {
 server.listen(3000, () =>
   console.log("Server running on port 3000")
 );
+
 
 

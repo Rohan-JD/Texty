@@ -1,127 +1,86 @@
-const users = new Set();
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static("public"));
+// ---------- SERVE FRONTEND ----------
+app.use(express.static(path.join(__dirname, "../public")));
 
-const users = {}; 
-// socketId -> { username, friends:Set, requests:Set }
+// ---------- USERS ----------
+const users = {}; // username -> socket
 
-socket.on("dm", ({ to, message }) => {
-  const targetSocket = users[to];
-  if (targetSocket) {
-    targetSocket.emit("dm", {
+// ---------- SOCKET ----------
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  // JOIN WITH USERNAME
+  socket.on("join", (username) => {
+    if (!username || users[username]) {
+      socket.emit("joinError", "Username already taken");
+      return;
+    }
+
+    socket.username = username;
+    users[username] = socket;
+
+    socket.emit("joinSuccess", username);
+
+    io.emit("chatMessage", {
+      user: "System",
+      message: `${username} joined the chat`
+    });
+  });
+
+  // GLOBAL CHAT
+  socket.on("chatMessage", (message) => {
+    if (!socket.username) return;
+
+    io.emit("chatMessage", {
+      user: socket.username,
+      message
+    });
+  });
+
+  // DMS
+  socket.on("dm", ({ to, message }) => {
+    if (!socket.username) return;
+
+    const target = users[to];
+    if (!target) {
+      socket.emit("chatMessage", {
+        user: "System",
+        message: `User ${to} not found`
+      });
+      return;
+    }
+
+    target.emit("dm", {
       from: socket.username,
       message
     });
-  }
-});
-
-const usernames = new Set();
-
-io.on("connection", (socket) => {
-  console.log("Connected:", socket.id);
-
-  socket.on("set-username", (username, cb) => {
-    if (usernames.has(username)) {
-      cb({ ok: false, msg: "Username already taken" });
-      return;
-      socket.on("join", (name) => {
-  if (users.has(name)) {
-    socket.emit("joinError", "Username already taken");
-    return;
-  }
-
-  users.add(name);
-  socket.username = name;
-  socket.emit("joinSuccess", name);
-
-       socket.on("disconnect", () => {
-  if (socket.username) {
-    users.delete(socket.username);
-  }
-});
-
-});
-
-    }
-
-    usernames.add(username);
-    users[socket.id] = {
-      username,
-      friends: new Set(),
-      requests: new Set()
-    };
-
-    cb({ ok: true });
-    io.emit("user-list", getUsernames());
   });
 
-  socket.on("send-friend-request", (targetUsername) => {
-    const sender = users[socket.id];
-    if (!sender) return;
-
-    const targetId = findSocketByUsername(targetUsername);
-    if (!targetId) return;
-
-    users[targetId].requests.add(sender.username);
-    io.to(targetId).emit("friend-request", sender.username);
-  });
-
-  socket.on("accept-friend", (fromUsername) => {
-    const user = users[socket.id];
-    const fromId = findSocketByUsername(fromUsername);
-    if (!fromId) return;
-
-    user.requests.delete(fromUsername);
-    user.friends.add(fromUsername);
-    users[fromId].friends.add(user.username);
-
-    io.to(fromId).emit("friend-added", user.username);
-    socket.emit("friend-added", fromUsername);
-  });
-
-  socket.on("dm", ({ to, message }) => {
-    const fromUser = users[socket.id];
-    if (!fromUser || !fromUser.friends.has(to)) return;
-
-    const targetId = findSocketByUsername(to);
-    if (!targetId) return;
-
-    io.to(targetId).emit("dm", {
-      from: fromUser.username,
-      message
-    });
-  });
-
+  // DISCONNECT
   socket.on("disconnect", () => {
-    const user = users[socket.id];
-    if (user) {
-      usernames.delete(user.username);
-      delete users[socket.id];
-      io.emit("user-list", getUsernames());
+    if (socket.username) {
+      delete users[socket.username];
+
+      io.emit("chatMessage", {
+        user: "System",
+        message: `${socket.username} left the chat`
+      });
     }
+
+    console.log("User disconnected:", socket.id);
   });
 });
 
-function findSocketByUsername(name) {
-  return Object.keys(users).find(
-    (id) => users[id].username === name
-  );
-}
-
-function getUsernames() {
-  return Object.values(users).map(u => u.username);
-}
-
-server.listen(3000, () =>
-  console.log("Server running on port 3000")
-);
-
-
-
+// ---------- PORT (RENDER NEEDS THIS) ----------
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log("Server running on port", PORT);
+});

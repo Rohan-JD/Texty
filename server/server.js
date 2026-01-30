@@ -1,3 +1,4 @@
+const users = new Set();
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -20,6 +21,24 @@ io.on("connection", (socket) => {
     if (usernames.has(username)) {
       cb({ ok: false, msg: "Username already taken" });
       return;
+      socket.on("join", (name) => {
+  if (users.has(name)) {
+    socket.emit("joinError", "Username already taken");
+    return;
+  }
+
+  users.add(name);
+  socket.username = name;
+  socket.emit("joinSuccess", name);
+
+       socket.on("disconnect", () => {
+  if (socket.username) {
+    users.delete(socket.username);
+  }
+});
+
+});
+
     }
 
     usernames.add(username);
@@ -93,4 +112,5 @@ function getUsernames() {
 server.listen(3000, () =>
   console.log("Server running on port 3000")
 );
+
 

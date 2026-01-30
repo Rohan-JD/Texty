@@ -87,9 +87,15 @@ document.getElementById("backBtn").onclick = () => {
   dmView.style.display = "none";
   globalView.style.display = "block";
 };
+  sendBtn.onclick = () => {
+  if (!username) return;
+  // send message
+};
+
 
 
 });
+
 
 
 

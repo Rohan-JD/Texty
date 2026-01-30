@@ -36,6 +36,28 @@
   <div id="messages"></div>
 </div>
 
+  <div id="globalView">
+  <!-- KEEP your old global chat boxes EXACTLY as they were -->
+  <div id="chatBox"></div>
+
+  <input id="globalInput" placeholder="Message global chat">
+  <button onclick="sendGlobal()">Send</button>
+</div>
+
+  <div id="dmView" style="display:none;">
+  <button id="backBtn">← Back</button>
+
+  <h2>Direct Messages</h2>
+
+  <div id="friends"></div>
+  <div id="dmMessages"></div>
+
+  <input id="dmTo" placeholder="Friend username">
+  <input id="dmInput" placeholder="Message">
+  <button onclick="sendDM()">Send</button>
+</div>
+
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="client.js"></script>
   <div class="header">
@@ -45,4 +67,5 @@
 
 </body>
 </html>
+
 

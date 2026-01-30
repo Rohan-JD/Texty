@@ -29,6 +29,15 @@ function setUsername() {
     }
   });
 }
+socket.on("joinSuccess", (name) => {
+  username = name;
+  usernameScreen.style.display = "none";
+});
+
+socket.on("joinError", (msg) => {
+  errorText.textContent = msg;
+});
+
 
 socket.on("user-list", (users) => {
   const ul = document.getElementById("users");
@@ -81,6 +90,7 @@ document.getElementById("backBtn").onclick = () => {
 
 
 });
+
 
 
 

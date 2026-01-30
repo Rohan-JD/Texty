@@ -1,35 +1,20 @@
 body {
-    background: black;
-    color: #00ff88;
-    font-family: monospace;
-    margin: 0;
-    padding: 10px;
+  font-family: Arial;
+  background: #111;
+  color: #fff;
+  padding: 20px;
 }
 
-#chat {
-    height: 70vh;
-    overflow-y: auto;
-    border: 1px solid #00ff88;
-    padding: 5px;
+input, button {
+  padding: 6px;
+  margin: 4px;
 }
 
-#input {
-    width: 100%;
-    background: black;
-    color: #00ff88;
-    border: 1px solid #00ff88;
-    padding: 8px;
+button {
+  cursor: pointer;
 }
 
-.system { color: yellow; }
-.username { color: cyan; }
-.time { color: gray; font-size: 10px; }
-
-#cutscene {
-    text-align: center;
-    animation: fade 2s forwards;
-}
-
-@keyframes fade {
-    to { opacity: 0; display: none; }
+#messages {
+  margin-top: 20px;
+  border-top: 1px solid #444;
 }

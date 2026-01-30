@@ -1,102 +1,114 @@
-let username = null;
+const socket = io();
 
-const joinBtn = document.getElementById("joinBtn");
-const usernameInput = document.getElementById("usernameInput");
+// ---------- ELEMENTS ----------
+const chatBox = document.getElementById("chatBox");
+const messageInput = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const dmBtn = document.getElementById("dmBtn");
+
 const usernameScreen = document.getElementById("usernameScreen");
+const usernameInput = document.getElementById("usernameInput");
+const joinBtn = document.getElementById("joinBtn");
 const errorText = document.getElementById("userError");
 
+let username = null;
+let mode = "global"; // "global" or "dm"
+let currentDM = null;
+
+// ---------- JOIN ----------
 joinBtn.onclick = () => {
   const name = usernameInput.value.trim();
-  if (!name) {
-    errorText.textContent = "Username required";
-    return;
-  }
+  if (!name) return (errorText.textContent = "Username required");
 
   socket.emit("join", name);
 };
 
-const socket = io();
-
-function setUsername() {
-  const username = document.getElementById("username").value;
-
-  socket.emit("set-username", username, (res) => {
-    if (!res.ok) {
-      alert(res.msg);
-    } else {
-      document.getElementById("login").hidden = true;
-      document.getElementById("app").hidden = false;
-    }
-  });
-}
 socket.on("joinSuccess", (name) => {
   username = name;
   usernameScreen.style.display = "none";
+  systemMessage(`Joined as ${name}`);
 });
 
 socket.on("joinError", (msg) => {
   errorText.textContent = msg;
 });
 
-
-socket.on("user-list", (users) => {
-  const ul = document.getElementById("users");
-  ul.innerHTML = "";
-
-  users.forEach(u => {
-    const li = document.createElement("li");
-    li.textContent = u;
-    li.onclick = () => socket.emit("send-friend-request", u);
-    ul.appendChild(li);
-  });
+// ---------- SEND ----------
+sendBtn.onclick = sendMessage;
+messageInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendMessage();
 });
 
-socket.on("friend-request", (from) => {
-  if (confirm(`Friend request from ${from}`)) {
-    socket.emit("accept-friend", from);
+function sendMessage() {
+  const msg = messageInput.value.trim();
+  if (!msg || !username) return;
+
+  if (mode === "global") {
+    socket.emit("chatMessage", msg);
+  } else if (mode === "dm" && currentDM) {
+    socket.emit("dm", {
+      to: currentDM,
+      message: msg
+    });
+
+    addMessage(`You → ${currentDM}`, msg);
   }
-});
 
-socket.on("friend-added", (friend) => {
-  const ul = document.getElementById("friends");
-  const li = document.createElement("li");
-  li.textContent = friend;
-  ul.appendChild(li);
-});
-
-function sendDM() {
-  const to = document.getElementById("dmUser").value;
-  const message = document.getElementById("dmMsg").value;
-
-  socket.emit("dm", { to, message });
+  messageInput.value = "";
 }
 
-socket.on("dm", ({ from, message }) => {
-  const div = document.getElementById("messages");
-  div.innerHTML += `<p><b>${from}:</b> ${message}</p>`;
-
-  const globalView = document.getElementById("globalView");
-const dmView = document.getElementById("dmView");
-
-document.getElementById("dmToggle").onclick = () => {
-  globalView.style.display = "none";
-  dmView.style.display = "block";
-};
-
-document.getElementById("backBtn").onclick = () => {
-  dmView.style.display = "none";
-  globalView.style.display = "block";
-};
-  sendBtn.onclick = () => {
-  if (!username) return;
-  // send message
-};
-
-
-
+// ---------- GLOBAL CHAT ----------
+socket.on("chatMessage", (data) => {
+  if (mode !== "global") return;
+  addMessage(data.user, data.message);
 });
 
+// ---------- DMS ----------
+socket.on("dm", (data) => {
+  if (mode !== "dm" || data.from !== currentDM) {
+    systemMessage(`New DM from ${data.from}`);
+    return;
+  }
 
+  addMessage(data.from, data.message);
+});
+
+// ---------- UI HELPERS ----------
+function addMessage(user, msg) {
+  const div = document.createElement("div");
+  div.className = "msg";
+  div.innerHTML = `<b>${user}:</b> ${msg}`;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function systemMessage(text) {
+  const div = document.createElement("div");
+  div.className = "msg";
+  div.innerHTML = `<i>${text}</i>`;
+  chatBox.appendChild(div);
+}
+
+// ---------- DM BUTTON ----------
+dmBtn.onclick = () => {
+  const target = prompt("DM username:");
+  if (!target || target === username) return;
+
+  mode = "dm";
+  currentDM = target;
+  chatBox.innerHTML = "";
+  systemMessage(`DMs with ${target}`);
+};
+
+// ---------- BACK TO GLOBAL ----------
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && mode === "dm") {
+    mode = "global";
+    currentDM = null;
+    chatBox.innerHTML = "";
+    systemMessage("Back to Global Chat");
+  }
+});
 
 
 

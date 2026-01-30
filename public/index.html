@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TEXTY</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Chat + DMs</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    
 <pre id="cutscene">
 ████████╗███████╗██╗  ██╗████████╗██╗   ██╗
 ╚══██╔══╝██╔════╝╚██╗██╔╝╚══██╔══╝╚██╗ ██╔╝
@@ -14,12 +15,25 @@
    ██║   ███████╗██╔╝ ██╗   ██║      ██║
 </pre>
 
-<div id="app" hidden>
-    <div id="users"></div>
-    <div id="chat"></div>
-    <div id="typing"></div>
 
-    <input id="input" placeholder="type message..." autocomplete="off">
+<div id="login">
+  <input id="username" placeholder="Username">
+  <button onclick="setUsername()">Join</button>
+</div>
+
+<div id="app" hidden>
+  <h2>Users</h2>
+  <ul id="users"></ul>
+
+  <h2>Friends</h2>
+  <ul id="friends"></ul>
+
+  <h2>DM</h2>
+  <input id="dmUser" placeholder="Friend username">
+  <input id="dmMsg" placeholder="Message">
+  <button onclick="sendDM()">Send</button>
+
+  <div id="messages"></div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

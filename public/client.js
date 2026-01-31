@@ -69,16 +69,24 @@ dmBtn.onclick = () => {
 
   mode = "dm";
   currentDM = target;
+
   chatBox.innerHTML = "";
+  addSystemMessage(`DMs with ${target}`);
+
   backBtn.style.display = "inline-block";
+  dmBtn.style.display = "none";
 };
 
 // -------- BACK TO GLOBAL --------
 backBtn.onclick = () => {
   mode = "global";
   currentDM = null;
+
   chatBox.innerHTML = "";
+  addSystemMessage("Global Chat");
+
   backBtn.style.display = "none";
+  dmBtn.style.display = "inline-block";
 };
 
 // -------- UI --------
@@ -88,4 +96,11 @@ function addMessage(user, msg) {
   div.innerHTML = `<b>${user}:</b> ${msg}`;
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function addSystemMessage(text) {
+  const div = document.createElement("div");
+  div.className = "system";
+  div.textContent = text;
+  chatBox.appendChild(div);
 }

@@ -12,7 +12,6 @@
       color: white;
     }
 
-    /* ---------- USERNAME SCREEN ---------- */
     #usernameScreen {
       position: fixed;
       inset: 0;
@@ -54,7 +53,6 @@
       margin-top: 10px;
     }
 
-    /* ---------- MAIN APP ---------- */
     #app {
       width: 800px;
       height: 90vh;
@@ -67,7 +65,6 @@
       box-shadow: 0 0 40px rgba(0,255,136,0.4);
     }
 
-    /* TOP BAR */
     #topBar {
       background: #00cc6a;
       padding: 12px 16px;
@@ -79,16 +76,16 @@
       color: black;
     }
 
-    #dmBtn {
+    #topBarRight button {
       background: black;
       color: #00ff88;
       border: none;
       padding: 6px 12px;
       cursor: pointer;
       font-size: 14px;
+      margin-left: 6px;
     }
 
-    /* CHAT */
     #chatBox {
       flex: 1;
       background: #0f0f0f;
@@ -101,7 +98,6 @@
       margin-bottom: 6px;
     }
 
-    /* INPUT */
     #inputBar {
       display: flex;
       background: #111;
@@ -130,7 +126,6 @@
 
 <body>
 
-  <!-- USERNAME GATE -->
   <div id="usernameScreen">
     <h1>Welcome to TEXTY</h1>
     <input id="usernameInput" placeholder="Enter username" />
@@ -138,16 +133,18 @@
     <p id="userError"></p>
   </div>
 
-  <!-- APP -->
   <div id="app">
     <div id="topBar">
       <span>TEXTY</span>
-      <button id="dmBtn">DMs</button>
+
+      <!-- 🔹 ONLY ADDITION HERE -->
+      <div id="topBarRight">
+        <button id="backBtn" style="display:none;">Back</button>
+        <button id="dmBtn">DMs</button>
+      </div>
     </div>
 
-    <div id="chatBox">
-      <div class="msg"><i>System: Loading...</i></div>
-    </div>
+    <div id="chatBox"></div>
 
     <div id="inputBar">
       <input id="messageInput" placeholder="Type a message..." />
@@ -155,9 +152,12 @@
     </div>
   </div>
 
-  <!-- SCRIPTS (ORDER MATTERS) -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="client.js"></script>
+</body>
+</html>
+
 
 </body>
 </html>
+

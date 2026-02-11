@@ -5,11 +5,16 @@ const messageInput = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 const dmBtn = document.getElementById("dmBtn");
 const backBtn = document.getElementById("backBtn");
+const settingsBtn = document.getElementById("settingsBtn");
 
 const usernameScreen = document.getElementById("usernameScreen");
 const usernameInput = document.getElementById("usernameInput");
 const joinBtn = document.getElementById("joinBtn");
 const errorText = document.getElementById("userError");
+
+const app = document.getElementById("app");
+const profileScreen = document.getElementById("profileScreen");
+const settingsScreen = document.getElementById("settingsScreen");
 
 let username = null;
 let mode = "global";
@@ -25,6 +30,7 @@ joinBtn.onclick = () => {
 socket.on("joinSuccess", (name) => {
   username = name;
   usernameScreen.style.display = "none";
+  app.style.display = "flex";
 });
 
 socket.on("joinError", (msg) => {
@@ -43,7 +49,7 @@ function sendMessage() {
 
   if (mode === "global") {
     socket.emit("chatMessage", msg);
-  } else {
+  } else if (mode === "dm") {
     socket.emit("dm", { to: currentDM, message: msg });
     addMessage(`You → ${currentDM}`, msg);
   }
@@ -69,38 +75,64 @@ dmBtn.onclick = () => {
 
   mode = "dm";
   currentDM = target;
-
   chatBox.innerHTML = "";
-  addSystemMessage(`DMs with ${target}`);
-
   backBtn.style.display = "inline-block";
-  dmBtn.style.display = "none";
 };
 
-// -------- BACK TO GLOBAL --------
+// -------- SETTINGS --------
+settingsBtn.onclick = () => {
+  mode = "settings";
+  chatBox.style.display = "none";
+  profileScreen.style.display = "none";
+  settingsScreen.style.display = "block";
+  backBtn.style.display = "inline-block";
+};
+
+// -------- BACK --------
 backBtn.onclick = () => {
   mode = "global";
   currentDM = null;
 
-  chatBox.innerHTML = "";
-  addSystemMessage("Global Chat");
+  chatBox.style.display = "block";
+  profileScreen.style.display = "none";
+  settingsScreen.style.display = "none";
 
   backBtn.style.display = "none";
-  dmBtn.style.display = "inline-block";
 };
+
+// -------- PROFILE VIEW --------
+function openProfile(user) {
+  mode = "profile";
+
+  chatBox.style.display = "none";
+  settingsScreen.style.display = "none";
+  profileScreen.style.display = "block";
+  backBtn.style.display = "inline-block";
+
+  profileScreen.innerHTML = `
+    <div class="profileCard">
+      <h2>${user}</h2>
+      <p>Bio: This is ${user}'s profile.</p>
+      <p>Member of TEXTY.</p>
+    </div>
+  `;
+}
 
 // -------- UI --------
 function addMessage(user, msg) {
   const div = document.createElement("div");
   div.className = "msg";
-  div.innerHTML = `<b>${user}:</b> ${msg}`;
+  div.innerHTML = `<span class="username" data-user="${user}">${user}</span>: ${msg}`;
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function addSystemMessage(text) {
-  const div = document.createElement("div");
-  div.className = "system";
-  div.textContent = text;
-  chatBox.appendChild(div);
-}
+// Click usernames
+chatBox.addEventListener("click", (e) => {
+  if (e.target.classList.contains("username")) {
+    const user = e.target.getAttribute("data-user");
+    openProfile(user);
+  }
+});
+
+

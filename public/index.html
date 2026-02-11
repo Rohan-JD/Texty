@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>TEXTY</title>
+
   <script src="/socket.io/socket.io.js"></script>
   <script defer src="client.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -14,7 +17,7 @@
 
     #usernameScreen {
       text-align: center;
-      margin-top: 100px;
+      margin-top: 120px;
     }
 
     input {
@@ -36,7 +39,6 @@
     #app {
       display: none;
       height: 100vh;
-      display: flex;
       flex-direction: column;
     }
 
@@ -83,7 +85,8 @@
       margin-right: 10px;
     }
 
-    #profileScreen, #settingsScreen {
+    #profileScreen,
+    #settingsScreen {
       display: none;
       flex: 1;
       padding: 30px;
@@ -101,7 +104,7 @@
 
 <div id="usernameScreen">
   <h1>Welcome to TEXTY</h1>
-  <input id="usernameInput" placeholder="Enter username" />
+  <input id="usernameInput" placeholder="Enter username">
   <button id="joinBtn">Join</button>
   <p id="userError"></p>
 </div>
@@ -118,16 +121,14 @@
   </div>
 
   <div id="chatBox"></div>
-
   <div id="profileScreen"></div>
-
   <div id="settingsScreen">
     <h2>Settings</h2>
-    <p>Customization coming soon 😈</p>
+    <p>Customization coming soon.</p>
   </div>
 
   <div id="inputBar">
-    <input id="messageInput" placeholder="Type a message..." />
+    <input id="messageInput" placeholder="Type a message...">
     <button id="sendBtn">Send</button>
   </div>
 
@@ -135,4 +136,6 @@
 
 </body>
 </html>
+
+
 

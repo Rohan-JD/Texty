@@ -23,7 +23,10 @@ let currentDM = null;
 // -------- JOIN --------
 joinBtn.onclick = () => {
   const name = usernameInput.value.trim();
-  if (!name) return errorText.textContent = "Username required";
+  if (!name) {
+    errorText.textContent = "Username required";
+    return;
+  }
   socket.emit("join", name);
 };
 
@@ -39,7 +42,7 @@ socket.on("joinError", (msg) => {
 
 // -------- SEND --------
 sendBtn.onclick = sendMessage;
-messageInput.addEventListener("keydown", e => {
+messageInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendMessage();
 });
 
@@ -58,12 +61,12 @@ function sendMessage() {
 }
 
 // -------- RECEIVE --------
-socket.on("chatMessage", data => {
+socket.on("chatMessage", (data) => {
   if (mode !== "global") return;
   addMessage(data.user, data.message);
 });
 
-socket.on("dm", data => {
+socket.on("dm", (data) => {
   if (mode !== "dm" || data.from !== currentDM) return;
   addMessage(data.from, data.message);
 });
@@ -75,16 +78,23 @@ dmBtn.onclick = () => {
 
   mode = "dm";
   currentDM = target;
+
   chatBox.innerHTML = "";
+  chatBox.style.display = "block";
+  profileScreen.style.display = "none";
+  settingsScreen.style.display = "none";
+
   backBtn.style.display = "inline-block";
 };
 
 // -------- SETTINGS --------
 settingsBtn.onclick = () => {
   mode = "settings";
+
   chatBox.style.display = "none";
   profileScreen.style.display = "none";
   settingsScreen.style.display = "block";
+
   backBtn.style.display = "inline-block";
 };
 
@@ -100,20 +110,21 @@ backBtn.onclick = () => {
   backBtn.style.display = "none";
 };
 
-// -------- PROFILE VIEW --------
+// -------- PROFILE --------
 function openProfile(user) {
   mode = "profile";
 
   chatBox.style.display = "none";
   settingsScreen.style.display = "none";
   profileScreen.style.display = "block";
+
   backBtn.style.display = "inline-block";
 
   profileScreen.innerHTML = `
     <div class="profileCard">
       <h2>${user}</h2>
       <p>Bio: This is ${user}'s profile.</p>
-      <p>Member of TEXTY.</p>
+      <p>Status: Online</p>
     </div>
   `;
 }
@@ -127,7 +138,6 @@ function addMessage(user, msg) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Click usernames
 chatBox.addEventListener("click", (e) => {
   if (e.target.classList.contains("username")) {
     const user = e.target.getAttribute("data-user");

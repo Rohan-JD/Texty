@@ -1,162 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
   <title>TEXTY</title>
-
+  <script src="/socket.io/socket.io.js"></script>
+  <script defer src="client.js"></script>
   <style>
     body {
       margin: 0;
-      background: #0b0b0b;
-      font-family: monospace;
+      background: #0a0a0a;
+      font-family: Arial, sans-serif;
       color: white;
     }
 
     #usernameScreen {
-      position: fixed;
-      inset: 0;
-      background: black;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
+      text-align: center;
+      margin-top: 100px;
     }
 
-    #usernameScreen h1 {
-      color: #00ff88;
-      font-size: 36px;
-      margin-bottom: 20px;
-    }
-
-    #usernameInput {
+    input {
       padding: 10px;
-      width: 240px;
       background: #111;
+      border: 1px solid #00ff88;
       color: white;
-      border: none;
       outline: none;
-      margin-bottom: 10px;
-      font-size: 16px;
     }
 
-    #joinBtn {
+    button {
+      padding: 10px 15px;
       background: #00ff88;
       border: none;
-      padding: 10px 20px;
-      font-weight: bold;
       cursor: pointer;
-    }
-
-    #userError {
-      color: red;
-      margin-top: 10px;
+      font-weight: bold;
     }
 
     #app {
-      width: 800px;
-      height: 90vh;
-      margin: 30px auto;
-      background: #00ff88;
-      border-radius: 12px;
+      display: none;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(0,255,136,0.4);
     }
 
     #topBar {
-      background: #00cc6a;
-      padding: 12px 16px;
+      background: #00ff88;
+      color: black;
+      padding: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 22px;
       font-weight: bold;
-      color: black;
     }
 
     #topBarRight button {
+      margin-left: 10px;
       background: black;
       color: #00ff88;
-      border: none;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-left: 6px;
     }
 
     #chatBox {
       flex: 1;
-      background: #0f0f0f;
-      padding: 10px;
+      padding: 20px;
       overflow-y: auto;
-      font-size: 14px;
     }
 
     .msg {
-      margin-bottom: 6px;
+      margin-bottom: 10px;
+    }
+
+    .username {
+      color: #00ff88;
+      cursor: pointer;
+      font-weight: bold;
     }
 
     #inputBar {
       display: flex;
+      padding: 10px;
       background: #111;
-      padding: 8px;
     }
 
     #messageInput {
       flex: 1;
-      padding: 8px;
-      background: #1a1a1a;
-      color: white;
-      border: none;
-      outline: none;
+      margin-right: 10px;
     }
 
-    #sendBtn {
-      background: #00ff88;
-      border: none;
-      padding: 8px 14px;
-      margin-left: 8px;
-      cursor: pointer;
-      font-weight: bold;
+    #profileScreen, #settingsScreen {
+      display: none;
+      flex: 1;
+      padding: 30px;
+    }
+
+    .profileCard {
+      background: #111;
+      padding: 20px;
+      border: 1px solid #00ff88;
+      width: 300px;
     }
   </style>
 </head>
-
 <body>
 
-  <div id="usernameScreen">
-    <h1>Welcome to TEXTY</h1>
-    <input id="usernameInput" placeholder="Enter username" />
-    <button id="joinBtn">Join</button>
-    <p id="userError"></p>
-  </div>
+<div id="usernameScreen">
+  <h1>Welcome to TEXTY</h1>
+  <input id="usernameInput" placeholder="Enter username" />
+  <button id="joinBtn">Join</button>
+  <p id="userError"></p>
+</div>
 
-  <div id="app">
-    <div id="topBar">
-      <span>TEXTY</span>
+<div id="app">
 
-      <!-- 🔹 ONLY ADDITION HERE -->
-      <div id="topBarRight">
-        <button id="backBtn" style="display:none;">Back</button>
-        <button id="dmBtn">DMs</button>
-      </div>
-    </div>
-
-    <div id="chatBox"></div>
-
-    <div id="inputBar">
-      <input id="messageInput" placeholder="Type a message..." />
-      <button id="sendBtn">Send</button>
+  <div id="topBar">
+    <span>TEXTY</span>
+    <div id="topBarRight">
+      <button id="backBtn" style="display:none;">Back</button>
+      <button id="settingsBtn">Settings</button>
+      <button id="dmBtn">DMs</button>
     </div>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="client.js"></script>
-</body>
-</html>
+  <div id="chatBox"></div>
 
+  <div id="profileScreen"></div>
+
+  <div id="settingsScreen">
+    <h2>Settings</h2>
+    <p>Customization coming soon 😈</p>
+  </div>
+
+  <div id="inputBar">
+    <input id="messageInput" placeholder="Type a message..." />
+    <button id="sendBtn">Send</button>
+  </div>
+
+</div>
 
 </body>
 </html>

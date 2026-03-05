@@ -1,148 +1,118 @@
 const socket = io();
 
-const chatBox = document.getElementById("chatBox");
-const messageInput = document.getElementById("messageInput");
-const sendBtn = document.getElementById("sendBtn");
-const dmBtn = document.getElementById("dmBtn");
-const backBtn = document.getElementById("backBtn");
-const settingsBtn = document.getElementById("settingsBtn");
-
-const usernameScreen = document.getElementById("usernameScreen");
+const loginScreen = document.getElementById("loginScreen");
 const usernameInput = document.getElementById("usernameInput");
-const joinBtn = document.getElementById("joinBtn");
-const errorText = document.getElementById("userError");
+const passwordInput = document.getElementById("passwordInput");
+const loginBtn = document.getElementById("loginBtn");
+const loginError = document.getElementById("loginError");
 
 const app = document.getElementById("app");
-const profileScreen = document.getElementById("profileScreen");
+const chatBox = document.getElementById("chatBox");
+
+const messageInput = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+
+const settingsBtn = document.getElementById("settingsBtn");
 const settingsScreen = document.getElementById("settingsScreen");
 
-let username = null;
-let mode = "global";
-let currentDM = null;
+const bioInput = document.getElementById("bioInput");
+const saveBio = document.getElementById("saveBio");
 
-// -------- JOIN --------
-joinBtn.onclick = () => {
-  const name = usernameInput.value.trim();
-  if (!name) {
-    errorText.textContent = "Username required";
-    return;
-  }
-  socket.emit("join", name);
+const userDisplay = document.getElementById("userDisplay");
+
+let username = "";
+let bio = "";
+
+loginBtn.onclick = () => {
+
+const user = usernameInput.value.trim();
+const pass = passwordInput.value.trim();
+
+if(!user || !pass) return;
+
+socket.emit("login",{
+username:user,
+password:pass
+});
+
 };
 
-socket.on("joinSuccess", (name) => {
-  username = name;
-  usernameScreen.style.display = "none";
-  app.style.display = "flex";
+socket.on("loginSuccess",(data)=>{
+
+username = data.username;
+bio = data.bio;
+
+loginScreen.style.display="none";
+app.style.display="flex";
+
+userDisplay.textContent=username;
+
+bioInput.value=bio;
+
 });
 
-socket.on("joinError", (msg) => {
-  errorText.textContent = msg;
+socket.on("loginError",(msg)=>{
+
+loginError.textContent=msg;
+
 });
 
-// -------- SEND --------
-sendBtn.onclick = sendMessage;
-messageInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendMessage();
+sendBtn.onclick=sendMessage;
+
+messageInput.addEventListener("keydown",(e)=>{
+if(e.key==="Enter") sendMessage();
 });
 
-function sendMessage() {
-  const msg = messageInput.value.trim();
-  if (!msg || !username) return;
+function sendMessage(){
 
-  if (mode === "global") {
-    socket.emit("chatMessage", msg);
-  } else if (mode === "dm") {
-    socket.emit("dm", { to: currentDM, message: msg });
-    addMessage(`You → ${currentDM}`, msg);
-  }
+const msg = messageInput.value.trim();
 
-  messageInput.value = "";
+if(!msg) return;
+
+socket.emit("chatMessage",{
+user:username,
+message:msg
+});
+
+messageInput.value="";
+
 }
 
-// -------- RECEIVE --------
-socket.on("chatMessage", (data) => {
-  if (mode !== "global") return;
-  addMessage(data.user, data.message);
+socket.on("chatMessage",(data)=>{
+
+addMessage(data.user,data.message);
+
 });
 
-socket.on("dm", (data) => {
-  if (mode !== "dm" || data.from !== currentDM) return;
-  addMessage(data.from, data.message);
-});
+function addMessage(user,msg){
 
-// -------- DMS --------
-dmBtn.onclick = () => {
-  const target = prompt("DM username:");
-  if (!target || target === username) return;
+const div=document.createElement("div");
 
-  mode = "dm";
-  currentDM = target;
+div.className="msg";
 
-  chatBox.innerHTML = "";
-  chatBox.style.display = "block";
-  profileScreen.style.display = "none";
-  settingsScreen.style.display = "none";
+div.innerHTML=`<span class="username">${user}</span>: ${msg}`;
 
-  backBtn.style.display = "inline-block";
-};
+chatBox.appendChild(div);
 
-// -------- SETTINGS --------
-settingsBtn.onclick = () => {
-  mode = "settings";
+chatBox.scrollTop=chatBox.scrollHeight;
 
-  chatBox.style.display = "none";
-  profileScreen.style.display = "none";
-  settingsScreen.style.display = "block";
-
-  backBtn.style.display = "inline-block";
-};
-
-// -------- BACK --------
-backBtn.onclick = () => {
-  mode = "global";
-  currentDM = null;
-
-  chatBox.style.display = "block";
-  profileScreen.style.display = "none";
-  settingsScreen.style.display = "none";
-
-  backBtn.style.display = "none";
-};
-
-// -------- PROFILE --------
-function openProfile(user) {
-  mode = "profile";
-
-  chatBox.style.display = "none";
-  settingsScreen.style.display = "none";
-  profileScreen.style.display = "block";
-
-  backBtn.style.display = "inline-block";
-
-  profileScreen.innerHTML = `
-    <div class="profileCard">
-      <h2>${user}</h2>
-      <p>Bio: This is ${user}'s profile.</p>
-      <p>Status: Online</p>
-    </div>
-  `;
 }
 
-// -------- UI --------
-function addMessage(user, msg) {
-  const div = document.createElement("div");
-  div.className = "msg";
-  div.innerHTML = `<span class="username" data-user="${user}">${user}</span>: ${msg}`;
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
+settingsBtn.onclick=()=>{
 
-chatBox.addEventListener("click", (e) => {
-  if (e.target.classList.contains("username")) {
-    const user = e.target.getAttribute("data-user");
-    openProfile(user);
-  }
+settingsScreen.style.display=
+settingsScreen.style.display==="none"
+?"block":"none";
+
+};
+
+saveBio.onclick=()=>{
+
+bio=bioInput.value;
+
+socket.emit("updateBio",{
+username:username,
+bio:bio
 });
 
-
+};

@@ -1,3 +1,8 @@
+const fs = require("fs");
+
+let users = {};
+let sockets = {};
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -71,3 +76,4 @@ io.on("connection", (socket) => {
 server.listen(3000, () => {
   console.log("Server running on port 3000");
 });
+

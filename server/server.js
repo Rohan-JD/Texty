@@ -28,6 +28,35 @@ function saveUsers() {
 }
 
 io.on("connection", (socket) => {
+  socket.on("login", ({ username, password }) => {
+
+  if (!users[username]) {
+    users[username] = {
+      password: password,
+      bio: "Hello! I'm new to TEXTY."
+    };
+  }
+
+  if (users[username].password !== password) {
+    socket.emit("loginError", "Wrong password");
+    return;
+  }
+    socket.on("updateBio", ({ username, bio }) => {
+
+  if (users[username]) {
+    users[username].bio = bio;
+  }
+
+});
+
+  sockets[username] = socket.id;
+
+  socket.emit("loginSuccess", {
+    username: username,
+    bio: users[username].bio
+  });
+
+});
 
   socket.on("login", ({ username, password }) => {
 
@@ -76,4 +105,5 @@ io.on("connection", (socket) => {
 server.listen(3000, () => {
   console.log("Server running on port 3000");
 });
+
 

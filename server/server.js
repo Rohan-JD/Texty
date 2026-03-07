@@ -13,6 +13,7 @@ const USERS_FILE = "users.json";
 
 let users = {};
 let sockets = {};
+let onlineUsers = [];
 
 if (fs.existsSync(USERS_FILE)) {
   users = JSON.parse(fs.readFileSync(USERS_FILE));
@@ -23,6 +24,8 @@ function saveUsers() {
 }
 
 io.on("connection", (socket) => {
+
+  let currentUser = null;
 
   socket.on("login", ({ username, password }) => {
 
@@ -39,13 +42,20 @@ io.on("connection", (socket) => {
       return;
     }
 
+    currentUser = username;
     sockets[username] = socket.id;
 
+    if (!onlineUsers.includes(username)) {
+      onlineUsers.push(username);
+    }
+
     socket.emit("loginSuccess", {
-      username,
+      username: username,
       bio: users[username].bio
     });
 
+    io.emit("systemMessage", `${username} joined TEXTY`);
+    io.emit("userList", onlineUsers);
   });
 
   socket.on("chatMessage", ({ user, message }) => {
@@ -60,6 +70,7 @@ io.on("connection", (socket) => {
       io.to(target).emit("dm", { from, message });
     }
 
+    socket.emit("dm", { from, message });
   });
 
   socket.on("updateBio", ({ username, bio }) => {
@@ -71,10 +82,24 @@ io.on("connection", (socket) => {
 
   });
 
+  socket.on("disconnect", () => {
+
+    if (currentUser) {
+
+      delete sockets[currentUser];
+
+      onlineUsers = onlineUsers.filter(u => u !== currentUser);
+
+      io.emit("systemMessage", `${currentUser} left TEXTY`);
+      io.emit("userList", onlineUsers);
+    }
+
+  });
+
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 server.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log("TEXTY running on port " + PORT);
 });

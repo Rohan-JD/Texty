@@ -1,25 +1,122 @@
 body{
-font-family:Arial;
-background:#111;
-color:white;
+background:#000;
+color:#00ff88;
+font-family: "Courier New", monospace;
+margin:0;
+padding:0;
 text-align:center;
 }
 
-#messages{
-height:300px;
-overflow:auto;
-border:1px solid gray;
-margin:10px;
-padding:10px;
+/* TITLE */
+
+h1{
+background:#001a0f;
+border-bottom:2px solid #00ff88;
+padding:15px;
+margin:0;
+letter-spacing:3px;
 }
+
+/* LOGIN */
+
+#login{
+margin-top:100px;
+}
+
+/* MAIN CHAT AREA */
+
+#chat{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+/* PROFILE */
+
+#profile{
+border:1px solid #00ff88;
+background:#001a0f;
+padding:10px;
+width:300px;
+margin:10px;
+}
+
+/* ONLINE USERS */
 
 #users{
-border:1px solid gray;
+border:1px solid #00ff88;
+background:#001a0f;
+width:300px;
 padding:10px;
 margin:10px;
 }
 
-input,textarea,button{
-margin:5px;
+/* MESSAGES */
+
+#messages{
+height:300px;
+width:600px;
+overflow-y:auto;
+border:1px solid #00ff88;
+background:#001a0f;
+padding:10px;
+margin:10px;
+text-align:left;
+}
+
+/* INPUTS */
+
+input, textarea{
+background:black;
+border:1px solid #00ff88;
+color:#00ff88;
+font-family:"Courier New", monospace;
 padding:8px;
+}
+
+textarea{
+width:250px;
+height:60px;
+}
+
+/* BUTTONS */
+
+button{
+background:black;
+border:1px solid #00ff88;
+color:#00ff88;
+padding:8px 15px;
+cursor:pointer;
+font-family:"Courier New", monospace;
+}
+
+button:hover{
+background:#003d24;
+}
+
+/* USER LIST CLICK */
+
+#users div{
+cursor:pointer;
+padding:4px;
+}
+
+#users div:hover{
+background:#003d24;
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+background:#00ff88;
+}
+
+/* SYSTEM MESSAGE */
+
+.system{
+color:#00aa55;
 }

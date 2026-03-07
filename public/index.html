@@ -10,10 +10,10 @@
 <style>
 
 body{
+margin:0;
 background:#0a0a0a;
 color:white;
 font-family:Arial;
-margin:0;
 }
 
 #loginScreen{
@@ -77,6 +77,7 @@ flex:1;
 margin-right:10px;
 }
 
+#profileScreen,
 #settingsScreen{
 display:none;
 padding:20px;
@@ -92,7 +93,7 @@ padding:20px;
 <h1>Welcome to TEXTY</h1>
 
 <input id="usernameInput" placeholder="Username"><br><br>
-<input id="passwordInput" placeholder="Password" type="password"><br><br>
+<input id="passwordInput" type="password" placeholder="Password"><br><br>
 
 <button id="loginBtn">Login / Register</button>
 
@@ -104,29 +105,32 @@ padding:20px;
 <div id="app">
 
 <div id="topBar">
-  <span>TEXTY</span>
 
-  <div id="topBarRight">
-    <button id="backBtn" style="display:none;">Back</button>
-    <button id="settingsBtn">Settings</button>
-    <button id="dmBtn">DMs</button>
-  </div>
+<span>TEXTY</span>
+
+<div>
+
+<button id="backBtn" style="display:none;">Back</button>
+<button id="settingsBtn">Settings</button>
+<button id="dmBtn">DMs</button>
+
 </div>
-
-<span id="userDisplay"></span>
 
 </div>
 
 <div id="chatBox"></div>
 
+<div id="profileScreen"></div>
+
 <div id="settingsScreen">
 
 <h2>Settings</h2>
 
-<h3>Change Bio</h3>
+<p>Change Bio</p>
 
 <input id="bioInput">
-<button id="saveBio">Save Bio</button>
+
+<button id="saveBio">Save</button>
 
 </div>
 
@@ -142,7 +146,3 @@ padding:20px;
 
 </body>
 </html>
-
-
-
-

@@ -14,19 +14,16 @@ const USERS_FILE = "users.json";
 let users = {};
 let sockets = {};
 
-// Load saved users
 if (fs.existsSync(USERS_FILE)) {
   users = JSON.parse(fs.readFileSync(USERS_FILE));
 }
 
-// Save users to file
 function saveUsers() {
   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 }
 
 io.on("connection", (socket) => {
 
-  // LOGIN / REGISTER
   socket.on("login", ({ username, password }) => {
 
     if (!users[username]) {
@@ -45,27 +42,26 @@ io.on("connection", (socket) => {
     sockets[username] = socket.id;
 
     socket.emit("loginSuccess", {
-      username: username,
+      username,
       bio: users[username].bio
     });
 
   });
 
-  // GLOBAL CHAT
   socket.on("chatMessage", ({ user, message }) => {
     io.emit("chatMessage", { user, message });
   });
 
-  // DMs
   socket.on("dm", ({ from, to, message }) => {
+
     const target = sockets[to];
 
     if (target) {
       io.to(target).emit("dm", { from, message });
     }
+
   });
 
-  // UPDATE BIO
   socket.on("updateBio", ({ username, bio }) => {
 
     if (users[username]) {
@@ -77,14 +73,8 @@ io.on("connection", (socket) => {
 
 });
 
-// Render requires using its PORT
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
-
-
-
-
-

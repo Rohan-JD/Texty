@@ -1,148 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
 <title>TEXTY</title>
-
-<script src="/socket.io/socket.io.js"></script>
-<script defer src="client.js"></script>
-
-<style>
-
-body{
-margin:0;
-background:#0a0a0a;
-color:white;
-font-family:Arial;
-}
-
-#loginScreen{
-text-align:center;
-margin-top:120px;
-}
-
-input{
-padding:10px;
-background:#111;
-border:1px solid #00ff88;
-color:white;
-}
-
-button{
-padding:10px 15px;
-background:#00ff88;
-border:none;
-cursor:pointer;
-font-weight:bold;
-}
-
-#app{
-display:none;
-height:100vh;
-flex-direction:column;
-}
-
-#topBar{
-background:#00ff88;
-color:black;
-padding:15px;
-display:flex;
-justify-content:space-between;
-}
-
-#chatBox{
-flex:1;
-padding:20px;
-overflow-y:auto;
-}
-
-.msg{
-margin-bottom:10px;
-}
-
-.username{
-color:#00ff88;
-cursor:pointer;
-font-weight:bold;
-}
-
-#inputBar{
-display:flex;
-padding:10px;
-background:#111;
-}
-
-#messageInput{
-flex:1;
-margin-right:10px;
-}
-
-#profileScreen,
-#settingsScreen{
-display:none;
-padding:20px;
-}
-
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="loginScreen">
+<h1>TEXTY</h1>
 
-<h1>Welcome to TEXTY</h1>
-
-<input id="usernameInput" placeholder="Username"><br><br>
-<input id="passwordInput" type="password" placeholder="Password"><br><br>
-
-<button id="loginBtn">Login / Register</button>
-
+<div id="login">
+<input id="username" placeholder="Username">
+<input id="password" placeholder="Password" type="password">
+<button onclick="login()">Login</button>
 <p id="loginError"></p>
+</div>
+
+<div id="chat" style="display:none">
+
+<div id="profile">
+<h3 id="myName"></h3>
+
+<textarea id="bio"></textarea>
+<button onclick="saveBio()">Save Bio</button>
+</div>
+
+<div id="users"></div>
+
+<div id="messages"></div>
+
+<input id="messageInput" placeholder="Message">
+<button onclick="sendMessage()">Send</button>
 
 </div>
 
-
-<div id="app">
-
-<div id="topBar">
-
-<span>TEXTY</span>
-
-<div>
-
-<button id="backBtn" style="display:none;">Back</button>
-<button id="settingsBtn">Settings</button>
-<button id="dmBtn">DMs</button>
-
-</div>
-
-</div>
-
-<div id="chatBox"></div>
-
-<div id="profileScreen"></div>
-
-<div id="settingsScreen">
-
-<h2>Settings</h2>
-
-<p>Change Bio</p>
-
-<input id="bioInput">
-
-<button id="saveBio">Save</button>
-
-</div>
-
-<div id="inputBar">
-
-<input id="messageInput" placeholder="Type message">
-
-<button id="sendBtn">Send</button>
-
-</div>
-
-</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>

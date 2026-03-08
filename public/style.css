@@ -123,19 +123,10 @@ color:#00ff9c;
 display:flex;
 align-items:center;
 justify-content:center;
-z-index:999;
+z-index:9999;
 font-size:18px;
+transition:opacity .8s;
+}
 }
 
-#loadingText{
-animation:fadeOut 2s forwards;
-animation-delay:2s;
-}
-
-@keyframes fadeOut{
-to{
-opacity:0;
-visibility:hidden;
-}
-}
 

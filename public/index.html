@@ -19,12 +19,18 @@ ACCESS GRANTED
 </div>
 
 <h1>TEXTY</h1>
+<div id="loginScreen">
 
-<div id="login">
-<input id="username" placeholder="Username">
-<input id="password" placeholder="Password" type="password">
-<button onclick="login()">Login</button>
-<p id="loginError"></p>
+  <div id="loginBox">
+    <h2>LOGIN TO TEXTY</h2>
+
+    <input id="username" placeholder="Username">
+
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="login()">Enter</button>
+  </div>
+
 </div>
 
 <div id="chat" style="display:none">
@@ -67,5 +73,6 @@ window.addEventListener("load", () => {
 
 </body>
 </html>
+
 
 

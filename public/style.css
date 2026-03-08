@@ -112,3 +112,30 @@ width:6px;
 ::-webkit-scrollbar-thumb{
 background:#00ff9c;
 }
+#loadingScreen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+color:#00ff9c;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:999;
+font-size:18px;
+}
+
+#loadingText{
+animation:fadeOut 2s forwards;
+animation-delay:2s;
+}
+
+@keyframes fadeOut{
+to{
+opacity:0;
+visibility:hidden;
+}
+}
+

@@ -128,8 +128,7 @@ font-size:18px;
 transition:opacity .8s;
 }
 /* LOGIN SCREEN */
-
-#loginScreen{
+#login{
 position:fixed;
 top:0;
 left:0;
@@ -139,6 +138,17 @@ display:flex;
 justify-content:center;
 align-items:center;
 background:black;
+}
+
+#loginBox{
+border:2px solid #00ff9c;
+padding:40px;
+background:#00140c;
+display:flex;
+flex-direction:column;
+gap:12px;
+width:260px;
+text-align:center;
 }
 
 /* LOGIN BOX */
@@ -173,6 +183,7 @@ width:100%;
 margin-top:10px;
 }
 }
+
 
 
 

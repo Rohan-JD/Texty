@@ -19,7 +19,7 @@ ACCESS GRANTED
 </div>
 
 <h1>TEXTY</h1>
-<div id="loginScreen">
+<div id="login">
 
   <div id="loginBox">
     <h2>LOGIN TO TEXTY</h2>
@@ -29,10 +29,12 @@ ACCESS GRANTED
     <input id="password" type="password" placeholder="Password">
 
     <button onclick="login()">Enter</button>
+
+    <div id="loginError" style="color:red;"></div>
+
   </div>
 
 </div>
-
 <div id="chat" style="display:none">
 
 <div id="profile">
@@ -73,6 +75,7 @@ window.addEventListener("load", () => {
 
 </body>
 </html>
+
 
 
 

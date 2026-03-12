@@ -111,5 +111,10 @@ const bio = document.getElementById("bio").value;
 socket.emit("updateBio",{username:myUsername,bio});
 
 alert("Bio saved");
+  <button onclick="startAudioCall()">Audio Call</button>
+<button onclick="startVideoCall()">Video Call</button>
+
+<video id="localVideo" autoplay muted></video>
+<video id="remoteVideo" autoplay></video>
 
 }

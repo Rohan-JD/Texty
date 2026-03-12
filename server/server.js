@@ -25,6 +25,18 @@ function saveUsers() {
 
 io.on("connection", (socket) => {
 
+  socket.on("offer",(offer)=>{
+socket.broadcast.emit("offer",offer);
+});
+
+socket.on("answer",(answer)=>{
+socket.broadcast.emit("answer",answer);
+});
+
+socket.on("iceCandidate",(candidate)=>{
+socket.broadcast.emit("iceCandidate",candidate);
+});
+
   let currentUser = null;
 
   socket.on("login", ({ username, password }) => {
@@ -103,3 +115,4 @@ const PORT = 3000;
 server.listen(PORT, () => {
   console.log("TEXTY running on port " + PORT);
 });
+

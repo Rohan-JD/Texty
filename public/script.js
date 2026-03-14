@@ -117,4 +117,24 @@ alert("Bio saved");
 <video id="localVideo" autoplay muted></video>
 <video id="remoteVideo" autoplay></video>
 
+  // allow pressing Enter to login
+document.addEventListener("DOMContentLoaded", () => {
+
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+
+if(usernameInput){
+usernameInput.addEventListener("keydown",(e)=>{
+if(e.key === "Enter") login();
+});
+}
+
+if(passwordInput){
+passwordInput.addEventListener("keydown",(e)=>{
+if(e.key === "Enter") login();
+});
+}
+
+});
+
 }

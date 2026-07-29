@@ -46,6 +46,7 @@ text-align:center;
 border:1px solid #00ff9c;
 background:#00140c;
 height:420px;
+flex:1;
 overflow-y:auto;
 padding:10px;
 width:100%;
@@ -182,6 +183,24 @@ display:grid;
 grid-template-columns:280px 1fr;
 
 gap:20px;
+
+}
+
+#chatPanel{
+
+display:flex;
+
+flex-direction:column;
+
+height:70vh;
+
+}
+
+#inputBar{
+
+display:flex;
+
+gap:10px;
 
 }
 }

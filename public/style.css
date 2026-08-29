@@ -1,11 +1,12 @@
 /* =========================================================
    TEXTY V2
-   Clean Retro / Slightly Modern
+   Retro + Modern
+   Clean, compact, not overly rounded
    ========================================================= */
 
 
 /* =========================
-   GLOBAL
+   RESET
    ========================= */
 
 * {
@@ -16,26 +17,13 @@ html,
 body {
     width: 100%;
     height: 100%;
+    margin: 0;
 }
 
 body {
-    margin: 0;
-
-    background:
-        linear-gradient(
-            135deg,
-            #080b0a 0%,
-            #0d1210 50%,
-            #080b0a 100%
-        );
-
+    background: #0b0d0c;
     color: #e8eee9;
-
-    font-family:
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
+    font-family: "Segoe UI", Arial, sans-serif;
     overflow: hidden;
 }
 
@@ -46,18 +34,15 @@ body {
 
 #loadingScreen {
     position: fixed;
-
     inset: 0;
 
     z-index: 99999;
 
     display: flex;
-
-    align-items: center;
     justify-content: center;
+    align-items: center;
 
-    background: #070909;
-
+    background: #080a09;
     color: #39e58c;
 
     transition:
@@ -73,20 +58,13 @@ body {
 #loadingText {
     margin: 0;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-size: 15px;
-
     line-height: 1.8;
-
-    letter-spacing: 0.5px;
 
     text-align: left;
 
-    text-shadow:
-        0 0 8px rgba(57, 229, 140, 0.25);
+    letter-spacing: 0.4px;
 }
 
 
@@ -96,44 +74,39 @@ body {
 
 #login {
     position: fixed;
-
     inset: 0;
 
     z-index: 1000;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
     padding: 20px;
+
+    background: #0b0d0c;
 }
 
 #loginBox {
-    width: min(420px, 92vw);
+    width: 420px;
+    max-width: 92vw;
 
-    padding: 34px 38px 32px;
+    padding: 32px 36px;
 
-    background: #111614;
+    background: #151917;
 
-    border: 1px solid #3a4a42;
+    border: 1px solid #344039;
+    border-radius: 8px;
 
     box-shadow:
-        0 18px 50px rgba(0, 0, 0, 0.45),
-        0 0 0 1px rgba(57, 229, 140, 0.04);
-
-    border-radius: 8px;
+        0 20px 55px rgba(0, 0, 0, 0.5);
 }
 
 .loginLogo {
     color: #39e58c;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-size: 34px;
-
     font-weight: 700;
 
     letter-spacing: 7px;
@@ -142,27 +115,25 @@ body {
 }
 
 .loginSubtitle {
-    margin-top: 7px;
+    margin-top: 6px;
 
-    color: #84938b;
+    color: #7d8982;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-size: 11px;
 
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 
     text-align: center;
 }
 
 .loginDivider {
+    width: 100%;
     height: 1px;
 
-    margin: 25px 0;
+    margin: 24px 0;
 
-    background: #2b3530;
+    background: #2f3833;
 }
 
 #loginBox label {
@@ -170,12 +141,9 @@ body {
 
     margin-bottom: 7px;
 
-    color: #9facA5;
+    color: #98a59d;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-size: 11px;
 
     letter-spacing: 1px;
@@ -183,61 +151,47 @@ body {
 
 #loginBox input {
     width: 100%;
+    height: 43px;
 
-    height: 44px;
-
-    margin-bottom: 18px;
-
+    margin-bottom: 17px;
     padding: 0 12px;
-
-    border: 1px solid #37433e;
-
-    border-radius: 6px;
 
     outline: none;
 
-    background: #0b0f0d;
+    border: 1px solid #354139;
+    border-radius: 5px;
 
-    color: #eef5f0;
-
-    font-family:
-        "Segoe UI",
-        Arial,
-        sans-serif;
+    background: #0d110f;
+    color: #eaf1ec;
 
     font-size: 14px;
 
-    transition:
-        border-color 0.15s ease,
-        background 0.15s ease;
+    transition: border-color 0.15s ease;
 }
 
 #loginBox input:focus {
     border-color: #39e58c;
-
-    background: #0e1411;
 }
 
 #loginBox input::placeholder {
-    color: #606c65;
+    color: #59655e;
 }
 
 #loginButton {
     width: 100%;
-
-    height: 44px;
+    height: 43px;
 
     border: 1px solid #39e58c;
-
-    border-radius: 6px;
+    border-radius: 5px;
 
     background: #39e58c;
-
-    color: #08100c;
+    color: #07100b;
 
     cursor: pointer;
 
+    font-family: "Courier New", monospace;
     font-weight: 700;
+    font-size: 12px;
 
     letter-spacing: 0.5px;
 
@@ -247,19 +201,24 @@ body {
 }
 
 #loginButton:hover {
-    background: #58eca0;
+    background: #55eba0;
 }
 
 #loginButton:active {
     transform: translateY(1px);
 }
 
+#loginButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 #loginError {
-    min-height: 20px;
+    min-height: 18px;
 
     margin-top: 12px;
 
-    color: #ef7070;
+    color: #ef7777;
 
     font-size: 12px;
 
@@ -268,14 +227,10 @@ body {
 
 
 /* =========================
-   MAIN CHAT
+   MAIN APPLICATION
    ========================= */
 
 #chat {
-    width: min(1180px, 94vw);
-
-    height: min(760px, 90vh);
-
     position: absolute;
 
     top: 50%;
@@ -283,25 +238,21 @@ body {
 
     transform: translate(-50%, -50%);
 
-    display: flex;
+    width: min(1200px, 94vw);
+    height: min(760px, 90vh);
 
+    display: flex;
     flex-direction: column;
 
     overflow: hidden;
 
     background: #111513;
 
-    border: 1px solid #323d37;
-
-    border-radius: 10px;
+    border: 1px solid #303a35;
+    border-radius: 9px;
 
     box-shadow:
-        0 22px 70px rgba(0, 0, 0, 0.55);
-
-    /*
-      Important:
-      script.js still controls whether #chat is visible.
-    */
+        0 24px 70px rgba(0, 0, 0, 0.6);
 }
 
 
@@ -310,17 +261,15 @@ body {
    ========================= */
 
 #topBar {
-    height: 62px;
+    min-height: 62px;
 
     flex-shrink: 0;
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
-    padding: 0 22px;
+    padding: 0 21px;
 
     background: #171c19;
 
@@ -329,66 +278,44 @@ body {
 
 .brand {
     display: flex;
-
     align-items: center;
 
-    gap: 11px;
+    gap: 10px;
 }
 
 .brandMark {
     color: #39e58c;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-weight: 700;
-
-    font-size: 17px;
+    font-size: 16px;
 }
 
 .brandName {
-    color: #f1f5f2;
+    color: #eef4f0;
 
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-size: 22px;
-
+    font-family: "Courier New", monospace;
+    font-size: 21px;
     font-weight: 700;
 
     letter-spacing: 4px;
 }
 
-.topStatus {
+.topRight {
     display: flex;
-
     align-items: center;
-
-    gap: 8px;
-
-    color: #aab5ae;
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-size: 11px;
-
-    letter-spacing: 1px;
 }
 
-.statusDot {
-    width: 7px;
-    height: 7px;
+.topUser {
+    padding: 6px 10px;
 
-    border-radius: 50%;
+    border: 1px solid #344139;
+    border-radius: 5px;
 
-    background: #39e58c;
+    color: #aebbb3;
 
-    box-shadow:
-        0 0 7px rgba(57, 229, 140, 0.5);
+    font-family: "Courier New", monospace;
+    font-size: 11px;
 }
 
 
@@ -403,7 +330,7 @@ body {
 
     display: grid;
 
-    grid-template-columns: 270px 1fr;
+    grid-template-columns: 265px minmax(0, 1fr);
 }
 
 
@@ -413,14 +340,15 @@ body {
 
 #sidebar {
     min-width: 0;
+    min-height: 0;
 
-    padding: 14px;
+    padding: 13px;
+
+    overflow-y: auto;
 
     background: #151a17;
 
     border-right: 1px solid #303a35;
-
-    overflow-y: auto;
 }
 
 .panel {
@@ -429,7 +357,6 @@ body {
     background: #101411;
 
     border: 1px solid #2e3933;
-
     border-radius: 7px;
 }
 
@@ -442,35 +369,28 @@ body {
 
     color: #39e58c;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-size: 11px;
-
     font-weight: 700;
 
     letter-spacing: 1.5px;
 }
 
 .profileName {
-    margin-bottom: 17px;
+    margin-bottom: 16px;
 
-    color: #eef4f0;
+    color: #edf3ef;
 
-    font-family:
-        "Courier New",
-        monospace;
+    font-family: "Courier New", monospace;
 
     font-size: 18px;
-
     font-weight: 700;
 }
 
 .panelLabel {
     margin-bottom: 7px;
 
-    color: #7e8b84;
+    color: #7d8982;
 
     font-size: 10px;
 
@@ -480,27 +400,22 @@ body {
 #bio {
     width: 100%;
 
-    min-height: 92px;
+    min-height: 90px;
 
     resize: vertical;
 
     padding: 10px;
 
-    border: 1px solid #354039;
-
-    border-radius: 5px;
-
     outline: none;
+
+    border: 1px solid #354139;
+    border-radius: 5px;
 
     background: #0a0e0c;
 
-    color: #e8eee9;
+    color: #e5ede8;
 
-    font-family:
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
+    font-family: "Segoe UI", Arial, sans-serif;
     font-size: 13px;
 
     line-height: 1.4;
@@ -511,43 +426,36 @@ body {
 }
 
 #bio::placeholder {
-    color: #626f68;
+    color: #5d6962;
 }
 
 .secondaryButton {
     width: 100%;
 
-    margin-top: 9px;
-
     height: 34px;
 
-    border: 1px solid #425048;
+    margin-top: 9px;
 
+    border: 1px solid #3b4840;
     border-radius: 5px;
 
     background: #171d19;
-
-    color: #b9c5be;
+    color: #b8c4bd;
 
     cursor: pointer;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-size: 11px;
 
     transition:
-        border-color 0.15s ease,
         color 0.15s ease,
+        border-color 0.15s ease,
         background 0.15s ease;
 }
 
 .secondaryButton:hover {
-    border-color: #39e58c;
-
     color: #39e58c;
-
+    border-color: #39e58c;
     background: #19231d;
 }
 
@@ -557,12 +465,11 @@ body {
    ========================= */
 
 .usersPanel {
-    min-height: 160px;
+    min-height: 140px;
 }
 
 #users {
     display: flex;
-
     flex-direction: column;
 
     gap: 2px;
@@ -571,57 +478,46 @@ body {
 #users h3 {
     margin: 0 0 8px;
 
-    color: #76837b;
+    color: #738078;
 
+    font-family: "Courier New", monospace;
     font-size: 10px;
-
-    font-weight: 600;
 
     letter-spacing: 1px;
 }
 
-#users div {
-    position: relative;
+.onlineUser {
+    display: flex;
+    align-items: center;
 
-    padding: 9px 10px 9px 24px;
+    gap: 9px;
+
+    padding: 8px;
 
     border-radius: 5px;
 
-    color: #d7ded9;
+    color: #d8e0db;
 
     cursor: pointer;
 
-    font-family:
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
     font-size: 13px;
 
-    transition:
-        background 0.12s ease;
+    transition: background 0.12s ease;
 }
 
-#users div::before {
-    content: "";
+.onlineUser:hover {
+    background: #1b241e;
+}
 
-    position: absolute;
+.onlineDot {
+    width: 7px;
+    height: 7px;
 
-    left: 9px;
-    top: 50%;
-
-    width: 6px;
-    height: 6px;
-
-    transform: translateY(-50%);
+    flex-shrink: 0;
 
     border-radius: 50%;
 
     background: #39e58c;
-}
-
-#users div:hover {
-    background: #19211c;
 }
 
 
@@ -631,11 +527,9 @@ body {
 
 #chatPanel {
     min-width: 0;
-
     min-height: 0;
 
     display: flex;
-
     flex-direction: column;
 
     background: #0d110f;
@@ -647,37 +541,32 @@ body {
    ========================= */
 
 #chatHeader {
-    min-height: 66px;
+    min-height: 65px;
 
     flex-shrink: 0;
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     padding: 0 19px;
 
-    border-bottom: 1px solid #28312c;
-
     background: #111613;
+
+    border-bottom: 1px solid #29332d;
 }
 
 .chatTitle {
-    color: #eef4f0;
+    color: #edf3ef;
 
     font-size: 15px;
-
     font-weight: 700;
-
-    letter-spacing: 0.4px;
 }
 
 .chatSubtitle {
-    margin-top: 3px;
+    margin-top: 4px;
 
-    color: #6f7c74;
+    color: #6e7b73;
 
     font-size: 11px;
 }
@@ -685,16 +574,12 @@ body {
 .chatIndicator {
     padding: 5px 8px;
 
-    border: 1px solid #2e4939;
-
+    border: 1px solid #304437;
     border-radius: 4px;
 
     color: #39e58c;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-size: 9px;
 
     letter-spacing: 1px;
@@ -702,10 +587,11 @@ body {
 
 
 /* =========================
-   MESSAGES
+   MESSAGE AREA
    ========================= */
 
 #messages {
+    min-width: 0;
     min-height: 0;
 
     flex: 1;
@@ -715,24 +601,48 @@ body {
     padding: 18px 20px;
 
     background: #0d110f;
-
-    scrollbar-width: thin;
-
-    scrollbar-color: #34443b #0d110f;
 }
 
-#messages > div {
+.messageRow {
     margin-bottom: 8px;
-
-    color: #dce4df;
 
     font-size: 13px;
 
     line-height: 1.45;
 }
 
-#messages > div:last-child {
-    margin-bottom: 0;
+.messageUsername {
+    color: #39e58c;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.messageUsername:hover {
+    text-decoration: underline;
+}
+
+.messageText {
+    color: #dce4df;
+}
+
+.systemMessage {
+    margin: 8px 0;
+
+    color: #68756d;
+
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+}
+
+.dmMessage {
+    margin: 8px 0;
+
+    color: #a989ec;
+
+    font-family: "Courier New", monospace;
+    font-size: 12px;
 }
 
 
@@ -745,11 +655,11 @@ body {
 
     display: flex;
 
-    gap: 10px;
+    gap: 9px;
 
-    padding: 12px;
+    padding: 11px;
 
-    background: #141a16;
+    background: #151a17;
 
     border-top: 1px solid #303a35;
 }
@@ -761,22 +671,16 @@ body {
 
     height: 40px;
 
-    padding: 0 13px;
-
-    border: 1px solid #354139;
-
-    border-radius: 5px;
+    padding: 0 12px;
 
     outline: none;
 
-    background: #0a0e0c;
+    border: 1px solid #354139;
+    border-radius: 5px;
+
+    background: #0b0f0d;
 
     color: #edf4ef;
-
-    font-family:
-        "Segoe UI",
-        Arial,
-        sans-serif;
 
     font-size: 13px;
 }
@@ -786,65 +690,214 @@ body {
 }
 
 #messageInput::placeholder {
-    color: #5f6c65;
+    color: #5d6962;
 }
 
 #sendButton {
-    width: 90px;
-
+    width: 88px;
     height: 40px;
 
     border: 1px solid #39e58c;
-
     border-radius: 5px;
 
     background: #39e58c;
-
-    color: #08100c;
+    color: #07100b;
 
     cursor: pointer;
 
-    font-family:
-        "Courier New",
-        monospace;
-
+    font-family: "Courier New", monospace;
     font-size: 11px;
-
     font-weight: 700;
 
-    letter-spacing: 0.5px;
-
-    transition:
-        background 0.15s ease,
-        transform 0.1s ease;
+    transition: background 0.15s ease;
 }
 
 #sendButton:hover {
-    background: #58eca0;
-}
-
-#sendButton:active {
-    transform: translateY(1px);
+    background: #55eba0;
 }
 
 
 /* =========================
-   SYSTEM MESSAGE
+   PROFILE VIEW
    ========================= */
 
-#messages div[style*="gray"] {
-    color: #68766d !important;
+#profileView {
+    position: fixed;
+    inset: 0;
 
-    font-family:
-        "Courier New",
-        monospace;
+    z-index: 8000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #0b0d0c;
+}
+
+#profileCard {
+    width: min(500px, 90vw);
+
+    padding: 28px;
+
+    background: #151a17;
+
+    border: 1px solid #303a35;
+    border-radius: 8px;
+
+    box-shadow:
+        0 24px 65px rgba(0, 0, 0, 0.55);
+}
+
+#profileBackButton {
+    margin-bottom: 25px;
+
+    padding: 8px 12px;
+
+    border: 1px solid #39453e;
+    border-radius: 5px;
+
+    background: #101411;
+
+    color: #aebbb3;
+
+    cursor: pointer;
+
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+}
+
+#profileBackButton:hover {
+    color: #39e58c;
+    border-color: #39e58c;
+}
+
+.profileBigName {
+    color: #edf3ef;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 28px;
+    font
+
+/* =========================
+   PROFILE VIEW
+   ========================= */
+
+#profileView {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 8000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #0b0d0c;
+}
+
+#profileCard {
+    width: min(500px, 90vw);
+
+    padding: 28px;
+
+    background: #151a17;
+
+    border: 1px solid #303a35;
+    border-radius: 8px;
+
+    box-shadow:
+        0 24px 65px rgba(0, 0, 0, 0.55);
+}
+
+#profileBackButton {
+    margin-bottom: 25px;
+
+    padding: 8px 12px;
+
+    border: 1px solid #39453e;
+    border-radius: 5px;
+
+    background: #101411;
+
+    color: #aebbb3;
+
+    cursor: pointer;
+
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+}
+
+#profileBackButton:hover {
+    color: #39e58c;
+    border-color: #39e58c;
+}
+
+.profileBigName {
+    color: #edf3ef;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+.profileOnline {
+    margin-top: 8px;
+
+    font-family: "Courier New", monospace;
 
     font-size: 11px;
 }
 
+.onlineStatus {
+    color: #39e58c;
+}
+
+.offlineStatus {
+    color: #6f7973;
+}
+
+.profileBioTitle {
+    margin-top: 30px;
+    margin-bottom: 8px;
+
+    color: #7d8982;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+.profileBio {
+    min-height: 85px;
+
+    padding: 14px;
+
+    background: #0d110f;
+
+    border: 1px solid #2e3933;
+    border-radius: 6px;
+
+    color: #dce4df;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    white-space: pre-wrap;
+}
+
 
 /* =========================
-   SCROLLBAR
+   GENERAL SCROLLBARS
    ========================= */
 
 #messages::-webkit-scrollbar,
@@ -859,14 +912,14 @@ body {
 
 #messages::-webkit-scrollbar-thumb,
 #sidebar::-webkit-scrollbar-thumb {
-    background: #34423a;
+    background: #344139;
 
     border-radius: 4px;
 }
 
 #messages::-webkit-scrollbar-thumb:hover,
 #sidebar::-webkit-scrollbar-thumb:hover {
-    background: #44564b;
+    background: #46564d;
 }
 
 
@@ -874,7 +927,7 @@ body {
    MOBILE
    ========================= */
 
-@media (max-width: 750px) {
+@media (max-width: 800px) {
 
     body {
         overflow: auto;
@@ -892,12 +945,13 @@ body {
         height: 100vh;
 
         border-radius: 0;
-        border-left: 0;
-        border-right: 0;
+
+        border-left: none;
+        border-right: none;
     }
 
     #mainArea {
-        grid-template-columns: 210px 1fr;
+        grid-template-columns: 210px minmax(0, 1fr);
     }
 
     #sidebar {
@@ -919,233 +973,38 @@ body {
     #sendButton {
         width: 70px;
     }
-
-   /* =====================================================
-   MESSAGE FIXES
-   ===================================================== */
-
-.messageRow {
-    padding: 5px 0;
-}
-
-.messageUsername {
-    color: #39e58c;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.messageUsername:hover {
-    text-decoration: underline;
-}
-
-.messageText {
-    color: #dce4df;
-}
-
-.systemMessage {
-    margin: 8px 0;
-    color: #69766f;
-    font-family: "Courier New", monospace;
-    font-size: 11px;
-}
-
-.dmMessage {
-    margin: 8px 0;
-    color: #a987ff;
 }
 
 
-/* =====================================================
-   ONLINE USERS
-   ===================================================== */
-
-.onlineUser {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-
-    padding: 9px 8px;
-
-    border-radius: 5px;
-
-    color: #d7ded9;
-
-    cursor: pointer;
-
-    font-size: 13px;
-
-    transition: background 0.15s ease;
-}
-
-.onlineUser:hover {
-    background: #19211c;
-}
-
-.onlineDot {
-    width: 7px;
-    height: 7px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    background: #39e58c;
-
-    box-shadow:
-        0 0 6px rgba(57, 229, 140, 0.35);
-}
-
-
-/* =====================================================
-   PROFILE VIEW
-   ===================================================== */
-
-#profileView {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 5000;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    background: #0d110f;
-}
-
-#profileCard {
-    width: min(500px, 90vw);
-
-    padding: 28px;
-
-    background: #151a17;
-
-    border: 1px solid #303a35;
-
-    border-radius: 8px;
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.55);
-}
-
-#profileBackButton {
-    margin-bottom: 25px;
-
-    padding: 8px 12px;
-
-    border: 1px solid #354139;
-
-    border-radius: 5px;
-
-    background: #101411;
-
-    color: #b9c5be;
-
-    cursor: pointer;
-
-    font-family: "Courier New", monospace;
-}
-
-#profileBackButton:hover {
-    border-color: #39e58c;
-    color: #39e58c;
-}
-
-.profileBigName {
-    color: #eef4f0;
-
-    font-family: "Courier New", monospace;
-
-    font-size: 28px;
-
-    font-weight: 700;
-}
-
-.profileOnline {
-    margin-top: 8px;
-
-    font-family: "Courier New", monospace;
-
-    font-size: 11px;
-}
-
-.onlineStatus {
-    color: #39e58c;
-}
-
-.offlineStatus {
-    color: #747f79;
-}
-
-.profileBioTitle {
-    margin-top: 30px;
-    margin-bottom: 8px;
-
-    color: #7e8b84;
-
-    font-size: 10px;
-
-    letter-spacing: 1px;
-}
-
-.profileBio {
-    padding: 15px;
-
-    min-height: 80px;
-
-    background: #0d110f;
-
-    border: 1px solid #2e3933;
-
-    border-radius: 6px;
-
-    color: #dce4df;
-
-    line-height: 1.5;
-
-    white-space: pre-wrap;
-}
-
-
-/* =====================================================
-   REMOVE EMPTY SPACE BELOW APP
-   ===================================================== */
-
-html,
-body {
-    height: 100%;
-}
-
-body {
-    overflow: hidden;
-}
-
-#chat {
-    height: calc(100vh - 24px);
-    top: 12px;
-    bottom: auto;
-
-    transform: translateX(-50%);
-}
-
-#mainArea {
-    min-height: 0;
-}
-
-#chatPanel {
-    min-height: 0;
-}
-
-#messages {
-    min-height: 0;
-    flex: 1;
-}
-
-#inputBar {
-    flex-shrink: 0;
-}
+/* =========================
+   VERY SMALL SCREENS
+   ========================= */
+
+@media (max-width: 600px) {
+
+    #mainArea {
+        grid-template-columns: 1fr;
+    }
+
+    #sidebar {
+        display: none;
+    }
+
+    #chatPanel {
+        width: 100%;
+    }
+
+    #topBar {
+        min-height: 56px;
+    }
+
+    .chatSubtitle {
+        display: none;
+    }
+
+    #inputBar {
+        padding: 9px;
+    }
 }
 
 

@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>TEXTY</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-    <!-- =========================
-         BOOT / LOADING SCREEN
-         ========================= -->
 
-    <div id="loadingScreen">
+<!-- =====================================================
+     LOADING SCREEN
+     ===================================================== -->
 
-        <pre id="loadingText">Booting TEXTY...
+<div id="loadingScreen">
+
+<pre id="loadingText">Booting TEXTY...
 
 Connecting to server...
 Loading chat modules...
@@ -25,241 +34,330 @@ Authenticating user...
 
 ACCESS GRANTED</pre>
 
+</div>
+
+
+
+<!-- =====================================================
+     LOGIN
+     ===================================================== -->
+
+<div id="login">
+
+    <div id="loginBox">
+
+        <div class="loginLogo">
+            TEXTY
+        </div>
+
+        <div class="loginSubtitle">
+            SECURE CHAT SYSTEM
+        </div>
+
+        <div class="loginDivider"></div>
+
+
+        <label for="username">
+            USERNAME
+        </label>
+
+        <input
+            id="username"
+            type="text"
+            placeholder="Enter username"
+            maxlength="20"
+            autocomplete="username"
+        >
+
+
+        <label for="password">
+            PASSWORD
+        </label>
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Enter password"
+            autocomplete="current-password"
+        >
+
+
+        <button
+            id="loginButton"
+            type="button"
+            onclick="login()"
+        >
+            ENTER TEXTY
+        </button>
+
+
+        <div id="loginError"></div>
+
     </div>
 
+</div>
 
-    <!-- =========================
-         LOGIN
-         ========================= -->
 
-    <div id="login">
 
-        <div id="loginBox">
+<!-- =====================================================
+     MAIN APP
+     ===================================================== -->
 
-            <div class="loginLogo">TEXTY</div>
+<div id="chat">
 
-            <div class="loginSubtitle">
-                SECURE CHAT SYSTEM
+
+    <!-- TOP BAR -->
+
+    <header id="topBar">
+
+        <div class="brand">
+
+            <span class="brandMark">&gt;_</span>
+
+            <span class="brandName">
+                TEXTY
+            </span>
+
+        </div>
+
+
+        <div class="topRight">
+
+            <span class="topUser" id="topUser">
+                USER
+            </span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- MAIN CONTENT -->
+
+    <main id="mainArea">
+
+
+        <!-- =============================================
+             SIDEBAR
+             ============================================= -->
+
+        <aside id="sidebar">
+
+
+            <!-- PROFILE PANEL -->
+
+            <section class="panel profilePanel">
+
+                <div class="panelTitle">
+                    MY PROFILE
+                </div>
+
+
+                <div
+                    class="profileName"
+                    id="myName"
+                >
+                    User
+                </div>
+
+
+                <div class="panelLabel">
+                    BIO
+                </div>
+
+
+                <textarea
+                    id="bio"
+                    maxlength="160"
+                    placeholder="Write something about yourself..."
+                ></textarea>
+
+
+                <button
+                    type="button"
+                    onclick="saveBio()"
+                    class="secondaryButton"
+                >
+                    SAVE BIO
+                </button>
+
+            </section>
+
+
+
+            <!-- ONLINE USERS -->
+
+            <section class="panel usersPanel">
+
+                <div class="panelTitle">
+                    ONLINE
+                </div>
+
+                <div id="users"></div>
+
+            </section>
+
+
+        </aside>
+
+
+
+        <!-- =============================================
+             CHAT AREA
+             ============================================= -->
+
+        <section id="chatPanel">
+
+
+            <!-- CHAT HEADER -->
+
+            <div id="chatHeader">
+
+                <div>
+
+                    <div class="chatTitle">
+                        GLOBAL CHAT
+                    </div>
+
+                    <div class="chatSubtitle">
+                        Talk with everyone on TEXTY
+                    </div>
+
+                </div>
+
+
+                <div class="chatIndicator">
+                    LIVE
+                </div>
+
             </div>
 
-            <div class="loginDivider"></div>
 
-            <label for="username">
-                USERNAME
-            </label>
 
-            <input
-                id="username"
-                type="text"
-                placeholder="Enter username"
-                autocomplete="username"
-                maxlength="20"
-            >
+            <!-- MESSAGES -->
 
-            <label for="password">
-                PASSWORD
-            </label>
+            <div id="messages"></div>
 
-            <input
-                id="password"
-                type="password"
-                placeholder="Enter password"
-                autocomplete="current-password"
-            >
 
-            <button
-                type="button"
-                onclick="login()"
-                id="loginButton"
-            >
-                ENTER TEXTY
-            </button>
 
-            <div id="loginError"></div>
+            <!-- INPUT -->
 
+            <div id="inputBar">
+
+                <input
+                    id="messageInput"
+                    type="text"
+                    placeholder="Type a message..."
+                    maxlength="500"
+                    autocomplete="off"
+                >
+
+                <button
+                    id="sendButton"
+                    type="button"
+                    onclick="sendMessage()"
+                >
+                    SEND
+                </button>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     PROFILE VIEW
+     ===================================================== -->
+
+<div id="profileView">
+
+    <div id="profileCard">
+
+        <button
+            id="profileBackButton"
+            type="button"
+        >
+            ← BACK
+        </button>
+
+
+        <div class="profileBigName" id="profileUsername">
+            USER
+        </div>
+
+
+        <div
+            class="profileOnline"
+            id="profileStatus"
+        >
+            ● ONLINE
+        </div>
+
+
+        <div class="profileBioTitle">
+            BIO
+        </div>
+
+
+        <div
+            class="profileBio"
+            id="profileBio"
+        >
+            Loading...
         </div>
 
     </div>
 
-
-    <!-- =========================
-         MAIN APPLICATION
-         ========================= -->
-
-    <div id="chat">
-
-        <!-- TOP BAR -->
-
-        <header id="topBar">
-
-            <div class="brand">
-                <span class="brandMark">&gt;_</span>
-                <span class="brandName">TEXTY</span>
-            </div>
-
-            <div class="topStatus">
-                <span class="statusDot"></span>
-                ONLINE
-            </div>
-
-        </header>
+</div>
 
 
-        <!-- MAIN CONTENT -->
 
-        <main id="mainArea">
+<!-- =====================================================
+     SCRIPTS
+     ===================================================== -->
 
-            <!-- =========================
-                 LEFT SIDEBAR
-                 ========================= -->
+<script src="/socket.io/socket.io.js"></script>
 
-            <aside id="sidebar">
-
-                <!-- PROFILE -->
-
-                <section class="panel profilePanel">
-
-                    <div class="panelTitle">
-                        PROFILE
-                    </div>
-
-                    <div class="profileName">
-                        <span id="myName">User</span>
-                    </div>
-
-                    <div class="panelLabel">
-                        BIO
-                    </div>
-
-                    <textarea
-                        id="bio"
-                        maxlength="160"
-                        placeholder="Write something about yourself..."
-                    ></textarea>
-
-                    <button
-                        type="button"
-                        onclick="saveBio()"
-                        class="secondaryButton"
-                    >
-                        SAVE BIO
-                    </button>
-
-                </section>
+<script src="script.js"></script>
 
 
-                <!-- ONLINE USERS -->
 
-                <section class="panel usersPanel">
+<!-- =====================================================
+     LOADING SCREEN CONTROLLER
+     ===================================================== -->
 
-                    <div class="panelTitle">
-                        ONLINE USERS
-                    </div>
+<script>
 
-                    <div id="users"></div>
+window.addEventListener("load", () => {
 
-                </section>
+    const loadingScreen =
+        document.getElementById("loadingScreen");
 
-            </aside>
+    setTimeout(() => {
 
+        loadingScreen.classList.add("hidden");
 
-            <!-- =========================
-                 CHAT
-                 ========================= -->
+        setTimeout(() => {
 
-            <section id="chatPanel">
+            loadingScreen.style.display = "none";
 
-                <div id="chatHeader">
+        }, 700);
 
-                    <div>
-                        <div class="chatTitle">
-                            GLOBAL CHAT
-                        </div>
+    }, 2400);
 
-                        <div class="chatSubtitle">
-                            Everyone on TEXTY can see messages here
-                        </div>
-                    </div>
+});
 
-                    <div class="chatIndicator">
-                        LIVE
-                    </div>
+</script>
 
-                </div>
-
-
-                <div id="messages">
-
-                    <!-- Messages are inserted by script.js -->
-
-                </div>
-
-
-                <!-- MESSAGE INPUT -->
-
-                <div id="inputBar">
-
-                    <input
-                        id="messageInput"
-                        type="text"
-                        placeholder="Type a message..."
-                        autocomplete="off"
-                        maxlength="500"
-                    >
-
-                    <button
-                        type="button"
-                        onclick="sendMessage()"
-                        id="sendButton"
-                    >
-                        SEND
-                    </button>
-
-                </div>
-
-            </section>
-
-        </main>
-
-    </div>
-
-
-    <!-- =========================
-         SOCKET.IO + SCRIPT
-         ========================= -->
-
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
-
-
-    <!-- =========================
-         LOADING SCREEN CONTROL
-         ========================= -->
-
-    <script>
-
-        window.addEventListener("load", () => {
-
-            const loadingScreen =
-                document.getElementById("loadingScreen");
-
-            setTimeout(() => {
-
-                loadingScreen.classList.add("hidden");
-
-                setTimeout(() => {
-                    loadingScreen.style.display = "none";
-                }, 700);
-
-            }, 2400);
-
-        });
-
-    </script>
 
 </body>
+
 </html>
-
-
-
-

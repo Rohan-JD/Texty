@@ -1,81 +1,264 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>TEXTY</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TEXTY</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div id="loadingScreen">
-<pre id="loadingText">
-Booting TEXTY...
+
+    <!-- =========================
+         BOOT / LOADING SCREEN
+         ========================= -->
+
+    <div id="loadingScreen">
+
+        <pre id="loadingText">Booting TEXTY...
 
 Connecting to server...
 Loading chat modules...
 Authenticating user...
 
-ACCESS GRANTED
-</pre>
-</div>
+ACCESS GRANTED</pre>
 
-<h1>TEXTY</h1>
-<div id="login">
+    </div>
 
-  <div id="loginBox">
-    <h2>LOGIN TO TEXTY</h2>
 
-    <input id="username" placeholder="Username">
+    <!-- =========================
+         LOGIN
+         ========================= -->
 
-    <input id="password" type="password" placeholder="Password">
+    <div id="login">
 
-    <button onclick="login()">Enter</button>
+        <div id="loginBox">
 
-    <div id="loginError" style="color:red;"></div>
+            <div class="loginLogo">TEXTY</div>
 
-  </div>
+            <div class="loginSubtitle">
+                SECURE CHAT SYSTEM
+            </div>
 
-</div>
-<div id="chat" style="display:none">
+            <div class="loginDivider"></div>
 
-<div id="profile">
-<h3 id="myName"></h3>
+            <label for="username">
+                USERNAME
+            </label>
 
-<textarea id="bio"></textarea>
-<button onclick="saveBio()">Save Bio</button>
-</div>
+            <input
+                id="username"
+                type="text"
+                placeholder="Enter username"
+                autocomplete="username"
+                maxlength="20"
+            >
 
-<div id="users"></div>
+            <label for="password">
+                PASSWORD
+            </label>
 
-<div id="messages"></div>
+            <input
+                id="password"
+                type="password"
+                placeholder="Enter password"
+                autocomplete="current-password"
+            >
 
-<input id="messageInput" placeholder="Message">
+            <button
+                type="button"
+                onclick="login()"
+                id="loginButton"
+            >
+                ENTER TEXTY
+            </button>
 
-</div>
+            <div id="loginError"></div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="script.js"></script>
+        </div>
 
-  <script>
-window.addEventListener("load", () => {
+    </div>
 
-  const loading = document.getElementById("loadingScreen");
 
-  setTimeout(() => {
-    loading.style.opacity = "0";
+    <!-- =========================
+         MAIN APPLICATION
+         ========================= -->
 
-    setTimeout(() => {
-      loading.style.display = "none";
-    }, 800);
+    <div id="chat">
 
-  }, 2200);
+        <!-- TOP BAR -->
 
-});
-</script>
+        <header id="topBar">
+
+            <div class="brand">
+                <span class="brandMark">&gt;_</span>
+                <span class="brandName">TEXTY</span>
+            </div>
+
+            <div class="topStatus">
+                <span class="statusDot"></span>
+                ONLINE
+            </div>
+
+        </header>
+
+
+        <!-- MAIN CONTENT -->
+
+        <main id="mainArea">
+
+            <!-- =========================
+                 LEFT SIDEBAR
+                 ========================= -->
+
+            <aside id="sidebar">
+
+                <!-- PROFILE -->
+
+                <section class="panel profilePanel">
+
+                    <div class="panelTitle">
+                        PROFILE
+                    </div>
+
+                    <div class="profileName">
+                        <span id="myName">User</span>
+                    </div>
+
+                    <div class="panelLabel">
+                        BIO
+                    </div>
+
+                    <textarea
+                        id="bio"
+                        maxlength="160"
+                        placeholder="Write something about yourself..."
+                    ></textarea>
+
+                    <button
+                        type="button"
+                        onclick="saveBio()"
+                        class="secondaryButton"
+                    >
+                        SAVE BIO
+                    </button>
+
+                </section>
+
+
+                <!-- ONLINE USERS -->
+
+                <section class="panel usersPanel">
+
+                    <div class="panelTitle">
+                        ONLINE USERS
+                    </div>
+
+                    <div id="users"></div>
+
+                </section>
+
+            </aside>
+
+
+            <!-- =========================
+                 CHAT
+                 ========================= -->
+
+            <section id="chatPanel">
+
+                <div id="chatHeader">
+
+                    <div>
+                        <div class="chatTitle">
+                            GLOBAL CHAT
+                        </div>
+
+                        <div class="chatSubtitle">
+                            Everyone on TEXTY can see messages here
+                        </div>
+                    </div>
+
+                    <div class="chatIndicator">
+                        LIVE
+                    </div>
+
+                </div>
+
+
+                <div id="messages">
+
+                    <!-- Messages are inserted by script.js -->
+
+                </div>
+
+
+                <!-- MESSAGE INPUT -->
+
+                <div id="inputBar">
+
+                    <input
+                        id="messageInput"
+                        type="text"
+                        placeholder="Type a message..."
+                        autocomplete="off"
+                        maxlength="500"
+                    >
+
+                    <button
+                        type="button"
+                        onclick="sendMessage()"
+                        id="sendButton"
+                    >
+                        SEND
+                    </button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================
+         SOCKET.IO + SCRIPT
+         ========================= -->
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+
+
+    <!-- =========================
+         LOADING SCREEN CONTROL
+         ========================= -->
+
+    <script>
+
+        window.addEventListener("load", () => {
+
+            const loadingScreen =
+                document.getElementById("loadingScreen");
+
+            setTimeout(() => {
+
+                loadingScreen.classList.add("hidden");
+
+                setTimeout(() => {
+                    loadingScreen.style.display = "none";
+                }, 700);
+
+            }, 2400);
+
+        });
+
+    </script>
 
 </body>
 </html>
-
-
 
 
 

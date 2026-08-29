@@ -2,117 +2,315 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
-const USERS_FILE = "users.json";
+const USERS_FILE = path.join(__dirname, "users.json");
 
 let users = {};
 let sockets = {};
-let onlineUsers = [];
+
+// -------------------------
+// LOAD SAVED USERS
+// -------------------------
 
 if (fs.existsSync(USERS_FILE)) {
-  users = JSON.parse(fs.readFileSync(USERS_FILE));
+    try {
+        users = JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
+    } catch {
+        users = {};
+    }
 }
 
+// -------------------------
+// SAVE USERS
+// -------------------------
+
 function saveUsers() {
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+    fs.writeFileSync(
+        USERS_FILE,
+        JSON.stringify(users, null, 2),
+        "utf8"
+    );
 }
+
+// -------------------------
+// ONLINE USERS
+// -------------------------
+
+function getOnlineUsers() {
+    return Object.keys(sockets);
+}
+
+// -------------------------
+// SOCKET CONNECTION
+// -------------------------
 
 io.on("connection", (socket) => {
 
-  socket.on("offer",(offer)=>{
-socket.broadcast.emit("offer",offer);
-});
+    let currentUser = null;
 
-socket.on("answer",(answer)=>{
-socket.broadcast.emit("answer",answer);
-});
+    console.log("Socket connected:", socket.id);
 
-socket.on("iceCandidate",(candidate)=>{
-socket.broadcast.emit("iceCandidate",candidate);
-});
+    // =========================
+    // LOGIN / REGISTER
+    // =========================
 
-  let currentUser = null;
+    socket.on("login", (data) => {
 
-  socket.on("login", ({ username, password }) => {
+        if (!data || typeof data !== "object") {
+            socket.emit("loginError", "Invalid login.");
+            return;
+        }
 
-    if (!users[username]) {
-      users[username] = {
-        password: password,
-        bio: "Hello! I'm new to TEXTY."
-      };
-      saveUsers();
-    }
+        const username = String(data.username || "").trim();
+        const password = String(data.password || "");
 
-    if (users[username].password !== password) {
-      socket.emit("loginError", "Wrong password");
-      return;
-    }
+        // NO EMPTY USERNAME
+        if (!username) {
+            socket.emit("loginError", "Please enter a username.");
+            return;
+        }
 
-    currentUser = username;
-    sockets[username] = socket.id;
+        // NO EMPTY PASSWORD
+        if (!password) {
+            socket.emit("loginError", "Please enter a password.");
+            return;
+        }
 
-    if (!onlineUsers.includes(username)) {
-      onlineUsers.push(username);
-    }
+        // Username rules
+        if (username.length < 2) {
+            socket.emit("loginError", "Username must be at least 2 characters.");
+            return;
+        }
 
-    socket.emit("loginSuccess", {
-      username: username,
-      bio: users[username].bio
+        if (username.length > 20) {
+            socket.emit("loginError", "Username must be 20 characters or less.");
+            return;
+        }
+
+        // Basic allowed characters
+        if (!/^[a-zA-Z0-9_ -]+$/.test(username)) {
+            socket.emit(
+                "loginError",
+                "Username can only contain letters, numbers, spaces and _."
+            );
+            return;
+        }
+
+        // New account
+        if (!users[username]) {
+
+            users[username] = {
+                password: password,
+                bio: "Hello! I'm new to TEXTY."
+            };
+
+            saveUsers();
+        }
+
+        // Existing account
+        if (users[username].password !== password) {
+            socket.emit("loginError", "Wrong password.");
+            return;
+        }
+
+        // Don't allow same account online twice
+        if (sockets[username]) {
+            socket.emit("loginError", "That account is already online.");
+            return;
+        }
+
+        currentUser = username;
+        sockets[username] = socket.id;
+
+        // Login success
+        socket.emit("loginSuccess", {
+            username: username,
+            bio: users[username].bio
+        });
+
+        // Update everyone
+        io.emit(
+            "systemMessage",
+            `${username} joined TEXTY`
+        );
+
+        io.emit(
+            "userList",
+            getOnlineUsers()
+        );
+
+        console.log(username, "logged in");
     });
 
-    io.emit("systemMessage", `${username} joined TEXTY`);
-    io.emit("userList", onlineUsers);
-  });
+    // =========================
+    // GLOBAL CHAT
+    // =========================
 
-  socket.on("chatMessage", ({ user, message }) => {
-    io.emit("chatMessage", { user, message });
-  });
+    socket.on("chatMessage", (data) => {
 
-  socket.on("dm", ({ from, to, message }) => {
+        if (!currentUser) {
+            return;
+        }
 
-    const target = sockets[to];
+        if (!data || typeof data.message !== "string") {
+            return;
+        }
 
-    if (target) {
-      io.to(target).emit("dm", { from, message });
-    }
+        const message = data.message.trim();
 
-    socket.emit("dm", { from, message });
-  });
+        // REJECT EMPTY MESSAGE
+        if (!message) {
+            return;
+        }
 
-  socket.on("updateBio", ({ username, bio }) => {
+        // Limit message size
+        if (message.length > 500) {
+            return;
+        }
 
-    if (users[username]) {
-      users[username].bio = bio;
-      saveUsers();
-    }
+        io.emit("chatMessage", {
+            user: currentUser,
+            message: message
+        });
+    });
 
-  });
+    // =========================
+    // DIRECT MESSAGES
+    // =========================
 
-  socket.on("disconnect", () => {
+    socket.on("dm", (data) => {
 
-    if (currentUser) {
+        if (!currentUser) {
+            return;
+        }
 
-      delete sockets[currentUser];
+        if (!data || typeof data !== "object") {
+            return;
+        }
 
-      onlineUsers = onlineUsers.filter(u => u !== currentUser);
+        const to = String(data.to || "").trim();
+        const message = String(data.message || "").trim();
 
-      io.emit("systemMessage", `${currentUser} left TEXTY`);
-      io.emit("userList", onlineUsers);
-    }
+        if (!to || !message) {
+            return;
+        }
 
-  });
+        if (message.length > 500) {
+            return;
+        }
 
+        const targetSocketId = sockets[to];
+
+        if (!targetSocketId) {
+            socket.emit("dmError", `User "${to}" is not online.`);
+            return;
+        }
+
+        // Send to receiver
+        io.to(targetSocketId).emit("dm", {
+            from: currentUser,
+            message: message
+        });
+
+        // Send copy to sender
+        socket.emit("dm", {
+            from: currentUser,
+            to: to,
+            message: message,
+            own: true
+        });
+    });
+
+    // =========================
+    // UPDATE BIO
+    // =========================
+
+    socket.on("updateBio", (data) => {
+
+        if (!currentUser) {
+            return;
+        }
+
+        if (!data || typeof data.bio !== "string") {
+            return;
+        }
+
+        const bio = data.bio.trim();
+
+        if (bio.length > 160) {
+            return;
+        }
+
+        users[currentUser].bio = bio;
+
+        saveUsers();
+
+        socket.emit("bioUpdated", bio);
+    });
+
+    // =========================
+    // VIEW PROFILE
+    // =========================
+
+    socket.on("getProfile", (requestedUsername) => {
+
+        if (!currentUser) {
+            return;
+        }
+
+        const username = String(requestedUsername || "").trim();
+
+        if (!username || !users[username]) {
+            socket.emit("profileError", "User not found.");
+            return;
+        }
+
+        socket.emit("profileData", {
+            username: username,
+            bio: users[username].bio,
+            online: Boolean(sockets[username])
+        });
+    });
+
+    // =========================
+    // DISCONNECT
+    // =========================
+
+    socket.on("disconnect", () => {
+
+        if (!currentUser) {
+            return;
+        }
+
+        delete sockets[currentUser];
+
+        io.emit(
+            "systemMessage",
+            `${currentUser} left TEXTY`
+        );
+
+        io.emit(
+            "userList",
+            getOnlineUsers()
+        );
+
+        console.log(currentUser, "disconnected");
+    });
 });
 
-const PORT = 3000;
+// -------------------------
+// START SERVER
+// -------------------------
+
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
-  console.log("TEXTY running on port " + PORT);
+    console.log(`TEXTY running on port ${PORT}`);
 });
-
